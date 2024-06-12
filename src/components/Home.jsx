@@ -10,6 +10,7 @@ const Home = () => {
         backgroundBlendMode: "multiply",
         backgroundColor: "gray",
       }}
+      id="home"
     >
       <div className="px-4 mx-auto max-w-screen-xl text-center py-24 lg:py-56">
         <h1 className="mb-4 text-3xl font-bold tracking-tight leading-none text-white md:text-5xl lg:text-5xl">
@@ -25,7 +26,7 @@ const Home = () => {
             href="#"
             className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900 hover:transition hover:duration-500"
           >
-            Get started
+            Mulai
             <svg
               className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
               aria-hidden="true"

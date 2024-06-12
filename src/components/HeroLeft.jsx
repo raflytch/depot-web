@@ -13,7 +13,7 @@ const HeroLeft = ({ bgColor, img, title, desc }) => {
           <h1 className="text-3xl lg:text-5xl text-white font-bold text-center lg:text-left">
             {title}
           </h1>
-          <p className="py-6 text-center lg:text-left text-gray-100">{desc}</p>
+          <p className="py-6 text-center lg:text-left text-white">{desc}</p>
         </div>
       </div>
     </div>
