@@ -17,7 +17,7 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
       setStock(stockData);
     };
     getStock();
-  }, [product, fetchStock]);
+  }, []);
 
   const handleAddToCart = () => {
     const formattedPrice = parseFloat(
