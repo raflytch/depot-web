@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { MdDashboard, MdViewList, MdOutlinePayment } from "react-icons/md";
 import { FaHandHoldingWater, FaSignOutAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+const Sidebar = ({ isOpen, toggleSidebar }) => {
+  const handleMenuClick = () => {
+    toggleSidebar(); // Close sidebar after clicking a link
   };
 
   return (
@@ -36,17 +34,20 @@ const Sidebar = () => {
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-items-start mb-4 mt-14">
-            <img src={logo} alt="Logo" className="h-10" />
-            <p className="font-bold">Depot Anugrah</p>
+          <div className="flex items-center justify-start mb-4 mt-14">
+            <img src={logo} alt="Logo" className="h-10 mr-2" />
+            <p className="font-bold text-gray-900 dark:text-gray-200">
+              Depot Anugrah
+            </p>
           </div>
 
           {/* Sidebar Menu */}
           <ul className="space-y-2 font-medium">
             <li>
               <Link
-                to="/dashboard"
+                to="/admin/dashboard"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={handleMenuClick}
               >
                 <MdDashboard size={24} />
                 <span className="ml-3">Dashboard</span>
@@ -54,8 +55,9 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                to="/barang"
+                to="/admin/barang"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={handleMenuClick}
               >
                 <MdViewList size={24} />
                 <span className="ml-3">Barang</span>
@@ -63,8 +65,9 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                to="/kualitas-air"
+                to="/admin/kualitas-air"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={handleMenuClick}
               >
                 <FaHandHoldingWater size={24} />
                 <span className="ml-3">Kualitas Air</span>
@@ -72,8 +75,9 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                to="/transaksi"
+                to="/admin/transaksi"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={handleMenuClick}
               >
                 <MdOutlinePayment size={24} />
                 <span className="ml-3">Daftar Transaksi</span>
@@ -81,8 +85,9 @@ const Sidebar = () => {
             </li>
             <li>
               <Link
-                to="/keluar"
+                to="/admin/keluar"
                 className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={handleMenuClick}
               >
                 <FaSignOutAlt size={24} />
                 <span className="ml-3">Keluar</span>
@@ -95,7 +100,7 @@ const Sidebar = () => {
       {/* Background Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-25 z-30"
+          className="fixed inset-0 bg-black opacity-50 z-30"
           onClick={toggleSidebar}
           aria-label="Close sidebar"
         ></div>
