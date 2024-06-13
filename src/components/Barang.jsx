@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import products from "../utils/product";
 
 const Barang = () => {
   const [stokBarang, setStokBarang] = useState([]);
@@ -13,19 +14,46 @@ const Barang = () => {
     event.target.reset();
   };
 
+  const groupedProducts = products.reduce((acc, product) => {
+    if (!acc[product.category]) {
+      acc[product.category] = [];
+    }
+    acc[product.category].push(product);
+    return acc;
+  }, {});
+
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4">Stok Barang</h1>
+    <div className="p-4 px-14">
+      <h1 className="text-xl font-bold mb-4 text-primary lg:text-3xl">
+        Stok Barang
+      </h1>
       <form onSubmit={handleAddBarang}>
         <div>
-          <label>Nama Barang</label>
-          <input type="text" name="nama" required />
+          <label className="label">Nama Barang</label>
+          <select name="nama" required className="select select-bordered">
+            {Object.keys(groupedProducts).map((category) => (
+              <optgroup label={category} key={category}>
+                {groupedProducts[category].map((product) => (
+                  <option value={product.product} key={product.product}>
+                    {product.product}
+                  </option>
+                ))}
+              </optgroup>
+            ))}
+          </select>
         </div>
         <div>
-          <label>Jumlah</label>
-          <input type="number" name="jumlah" required />
+          <label className="label">Jumlah</label>
+          <input
+            type="number"
+            name="jumlah"
+            required
+            className="input input-bordered"
+          />
         </div>
-        <button type="submit">Tambah Barang</button>
+        <button type="submit" className="btn btn-primary my-4">
+          Tambah Barang
+        </button>
       </form>
       <ul>
         {stokBarang.map((barang, index) => (

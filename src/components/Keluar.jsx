@@ -10,7 +10,7 @@ const Keluar = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-4 px-4">
       <h1 className="text-3xl font-bold mb-4">Keluar</h1>
       <button onClick={handleSignOut} className="btn btn-primary">
         Sign Out

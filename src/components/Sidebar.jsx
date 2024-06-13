@@ -1,13 +1,19 @@
+// Sidebar.jsx
+
 import React from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { MdDashboard, MdViewList, MdOutlinePayment } from "react-icons/md";
 import { FaHandHoldingWater, FaSignOutAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
-  const handleMenuClick = () => {
-    toggleSidebar(); // Close sidebar after clicking a link
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleSignOut = () => {
+    localStorage.removeItem("token");
+    navigate("/admin-login"); // Navigate to the admin login page
   };
 
   return (
@@ -45,9 +51,13 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           <ul className="space-y-2 font-medium">
             <li>
               <Link
-                to="/admin/dashboard"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                onClick={handleMenuClick}
+                to="/admin"
+                className={`flex items-center p-2 px-4 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group ${
+                  location.pathname === "/admin"
+                    ? "bg-gray-100 dark:bg-gray-700"
+                    : ""
+                }`}
+                onClick={toggleSidebar} // Memanggil toggleSidebar untuk menutup sidebar
               >
                 <MdDashboard size={24} />
                 <span className="ml-3">Dashboard</span>
@@ -56,8 +66,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <li>
               <Link
                 to="/admin/barang"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                onClick={handleMenuClick}
+                className="flex items-center p-2 px-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={toggleSidebar} // Memanggil toggleSidebar untuk menutup sidebar
               >
                 <MdViewList size={24} />
                 <span className="ml-3">Barang</span>
@@ -66,8 +76,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <li>
               <Link
                 to="/admin/kualitas-air"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                onClick={handleMenuClick}
+                className="flex items-center p-2 px-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={toggleSidebar} // Memanggil toggleSidebar untuk menutup sidebar
               >
                 <FaHandHoldingWater size={24} />
                 <span className="ml-3">Kualitas Air</span>
@@ -76,22 +86,21 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <li>
               <Link
                 to="/admin/transaksi"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                onClick={handleMenuClick}
+                className="flex items-center p-2 px-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                onClick={toggleSidebar} // Memanggil toggleSidebar untuk menutup sidebar
               >
                 <MdOutlinePayment size={24} />
                 <span className="ml-3">Daftar Transaksi</span>
               </Link>
             </li>
             <li>
-              <Link
-                to="/admin/keluar"
-                className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                onClick={handleMenuClick}
+              <button
+                onClick={handleSignOut}
+                className="flex items-center w-full p-2 px-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
               >
                 <FaSignOutAlt size={24} />
                 <span className="ml-3">Keluar</span>
-              </Link>
+              </button>
             </li>
           </ul>
         </div>

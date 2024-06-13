@@ -1,5 +1,7 @@
+// Admin.jsx
+
 import React, { useState } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
 import Dashboard from "../components/Dashboard";
 import Barang from "../components/Barang";
@@ -22,11 +24,15 @@ const Admin = () => {
       {/* Main Content */}
       <div className="w-full p-4">
         <Routes>
-          <Route path="/admin/dashboard" element={<Dashboard />} />
-          <Route path="/admin/barang" element={<Barang />} />
-          <Route path="/admin/kualitas-air" element={<KualitasAir />} />
-          <Route path="/admin/transaksi" element={<Transaksi />} />
-          <Route path="/admin/keluar" element={<Keluar />} />
+          {/* Route to Dashboard */}
+          <Route path="" element={<Dashboard />} />
+
+          {/* Other Routes */}
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="barang" element={<Barang />} />
+          <Route path="kualitas-air" element={<KualitasAir />} />
+          <Route path="transaksi" element={<Transaksi />} />
+          <Route path="keluar" element={<Keluar />} />
         </Routes>
       </div>
     </div>

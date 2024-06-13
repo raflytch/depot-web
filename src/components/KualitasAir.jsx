@@ -14,18 +14,32 @@ const KualitasAir = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-3xl font-bold mb-4">Kualitas Air</h1>
+    <div className="p-4 px-14">
+      <h1 className="text-xl font-bold mb-4 text-primary lg:text-3xl">
+        Kualitas Air
+      </h1>
       <form onSubmit={handleAddKualitas}>
         <div>
-          <label>Tingkat Kualitas</label>
-          <input type="text" name="tingkat" required />
+          <label className="label">Tingkat Kualitas</label>
+          <select name="tingkat" required className="select select-bordered">
+            <option value="Sangat Baik">Sangat Baik</option>
+            <option value="Baik">Baik</option>
+            <option value="Cukup">Cukup</option>
+            <option value="Buruk">Buruk</option>
+          </select>
         </div>
         <div>
-          <label>Keterangan</label>
-          <input type="text" name="keterangan" required />
+          <label className="label">Keterangan</label>
+          <input
+            type="text"
+            name="keterangan"
+            required
+            className="input input-bordered"
+          />
         </div>
-        <button type="submit">Tambah Kualitas</button>
+        <button type="submit" className="btn btn-primary my-4">
+          Tambah Kualitas
+        </button>
       </form>
       <ul>
         {kualitasAir.map((kualitas, index) => (
