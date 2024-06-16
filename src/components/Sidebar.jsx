@@ -7,14 +7,36 @@ import { FaHandHoldingWater, FaSignOutAlt } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/img/logo.png";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleSignOut = () => {
-    Cookies.remove("access_token");
-    navigate("/admin-login"); // Navigate to the admin login page
+    Swal.fire({
+      title: "Apakah Anda yakin ingin keluar?",
+      text: "Anda akan keluar dari akun Anda.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Ya, keluar",
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Cookies.remove("access_token");
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil keluar",
+          text: "Anda telah berhasil keluar.",
+          timer: 1500,
+          showConfirmButton: false,
+        }).then(() => {
+          navigate("/admin-login");
+        });
+      }
+    });
   };
 
   return (

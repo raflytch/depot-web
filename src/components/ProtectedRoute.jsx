@@ -1,52 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
-import Cookies from "js-cookie";
-import Loading from "../components/Loading"; // Import the Loading component
+import { useSelector } from "react-redux";
 
-const ProtectedRoute = ({ element }) => {
-  const [isValid, setIsValid] = useState(null); // null = not checked, true = valid, false = invalid
+const ProtectedRoute = ({ element, role }) => {
+  const { role: userRole } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    const verifyToken = async () => {
-      const accessToken = Cookies.get("access_token");
-
-      if (!accessToken) {
-        setIsValid(false);
-        return;
-      }
-
-      try {
-        const response = await fetch(
-          "http://localhost:3000/auth/verify-token",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`, // Send token in the Authorization header
-            },
-          }
-        );
-
-        if (response.ok) {
-          setIsValid(true);
-        } else {
-          setIsValid(false);
-        }
-      } catch (error) {
-        console.error("Error verifying token:", error);
-        setIsValid(false);
-      }
-    };
-
-    verifyToken();
-  }, []);
-
-  if (isValid === null) {
-    // Show the Loading component while checking token
-    return <Loading />;
+  if (userRole !== "ADMIN") {
+    return <Navigate to="/login" replace />;
   }
 
-  return isValid ? element : <Navigate to="/admin-login" />;
+  return element;
 };
 
 export default ProtectedRoute;

@@ -1,16 +1,36 @@
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 
 const KualitasAir = () => {
   const [kualitasAir, setKualitasAir] = useState([]);
 
-  const handleAddKualitas = (event) => {
+  const handleAddKualitas = async (event) => {
     event.preventDefault();
-    const newKualitas = {
-      tingkat: event.target.tingkat.value,
-      keterangan: event.target.keterangan.value,
-    };
-    setKualitasAir([...kualitasAir, newKualitas]);
-    event.target.reset();
+
+    const accessToken = Cookies.get("access_token");
+    const url = "http://localhost:3000/auth/kualitas-air";
+
+    const res = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({
+        tingkat: event.target.tingkat.value,
+      }),
+    });
+
+    if (res.ok) {
+      const newKualitas = {
+        tingkat: event.target.tingkat.value,
+        keterangan: event.target.keterangan.value,
+      };
+      setKualitasAir([...kualitasAir, newKualitas]);
+      event.target.reset();
+    } else {
+      alert("Failed to add kualitas air");
+    }
   };
 
   return (
