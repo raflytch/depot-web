@@ -6,13 +6,14 @@ import { MdDashboard, MdViewList, MdOutlinePayment } from "react-icons/md";
 import { FaHandHoldingWater, FaSignOutAlt } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from "../assets/img/logo.png";
+import Cookies from "js-cookie";
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleSignOut = () => {
-    localStorage.removeItem("token");
+    Cookies.remove("access_token");
     navigate("/admin-login"); // Navigate to the admin login page
   };
 

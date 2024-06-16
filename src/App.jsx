@@ -6,7 +6,8 @@ import LoginPage from "./pages/LoginUser";
 import RegisterPage from "./pages/RegisterUser";
 import ProductPage from "./pages/product";
 import Admin from "./pages/Admin";
-import LoginAdminPage from "./pages/LoginAdminPage"; // Import admin login page
+import LoginAdminPage from "./pages/LoginAdminPage";
+import ProtectedRoute from "./components/ProtectedRoute"; // Import ProtectedRoute
 
 const App = () => {
   return (
@@ -16,9 +17,11 @@ const App = () => {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/products" element={<ProductPage />} />
-        <Route path="/admin/*" element={<Admin />} />
-        <Route path="/admin-login" element={<LoginAdminPage />} />{" "}
-        {/* Admin login route */}
+        <Route
+          path="/admin/*"
+          element={<ProtectedRoute element={<Admin />} />}
+        />
+        <Route path="/admin-login" element={<LoginAdminPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
