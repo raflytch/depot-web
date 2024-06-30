@@ -2,7 +2,7 @@ import React from "react";
 import AuthLayout from "../template/AuthLayout";
 
 const RegisterPage = () => {
-  return <AuthLayout role="user" />;
+  return <AuthLayout isRegister />;
 };
 
 export default RegisterPage;

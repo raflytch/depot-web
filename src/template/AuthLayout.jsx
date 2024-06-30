@@ -1,3 +1,5 @@
+// AuthLayout.jsx
+
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -5,17 +7,22 @@ import Swal from "sweetalert2";
 import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import imgLogin from "../assets/img/bgLogin.jpg"; // Import gambar latar belakang
 import { jwtDecode } from "jwt-decode";
 
-const AuthLayout = () => {
+const AuthLayout = ({ mode }) => {
   const navigate = useNavigate();
+  const [name, setName] = useState(""); // State untuk nama
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const isRegisterMode = mode === "register";
 
   const handleLogin = async (event) => {
     event.preventDefault();
-
     try {
+      // Logika untuk proses login
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: {
@@ -27,53 +34,112 @@ const AuthLayout = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Save access token to cookies
-        Cookies.set("access_token", data.access_token, { expires: 30 }); // Set cookie to expire in 30 days
+        // Handle login success
+        // ...
+      } else {
+        // Handle login failure
+        // ...
+      }
+    } catch (error) {
+      console.error("Error saat login:", error);
+      Swal.fire({
+        icon: "error",
+        title: "Login Gagal",
+        text: "Terjadi kesalahan saat login. Silakan coba lagi.",
+      });
+    }
+  };
 
-        // Decode the token to get the role
-        const decodedToken = jwtDecode(data.access_token);
-        const userRole = decodedToken.role;
+  const handleRegister = async (event) => {
+    event.preventDefault();
+    // Validasi konfirmasi password
+    if (password !== confirmPassword) {
+      Swal.fire({
+        icon: "error",
+        title: "Registrasi Gagal",
+        text: "Password dan konfirmasi password tidak cocok.",
+      });
+      return;
+    }
 
-        // Show success message
+    try {
+      // Logika untuk proses registrasi
+      const response = await fetch("http://localhost:3000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Handle registration success
         Swal.fire({
           icon: "success",
-          title: "Login Successful",
-          text: "You have successfully logged in.",
+          title: "Registrasi Berhasil",
+          text: "Akun Anda berhasil didaftarkan.",
         }).then(() => {
-          // Navigate to appropriate dashboard based on role
-          if (userRole === "admin") {
-            navigate("/admin/dashboard");
-          } else {
-            navigate("/dashboard");
-          }
+          navigate("/login"); // Redirect to login page after successful registration
         });
       } else {
-        // Show error message
+        // Handle registration failure
         Swal.fire({
           icon: "error",
-          title: "Login Failed",
-          text: data.message || "Login failed. Please try again.",
+          title: "Registrasi Gagal",
+          text:
+            data.message ||
+            "Terjadi kesalahan saat registrasi. Silakan coba lagi.",
         });
       }
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Error saat registrasi:", error);
       Swal.fire({
         icon: "error",
-        title: "Login Failed",
-        text: "An error occurred while logging in. Please try again.",
+        title: "Registrasi Gagal",
+        text: "Terjadi kesalahan saat registrasi. Silakan coba lagi.",
       });
     }
   };
 
   return (
-    <div className="hero min-h-screen w-full bg-white flex items-center justify-center">
+    <div
+      className="hero min-h-screen w-full bg-cover bg-center flex items-center justify-center"
+      style={{
+        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${imgLogin})`,
+      }}
+    >
       <div className="hero-content flex-col lg:flex-row-reverse gap-10 lg:gap-20 p-1 max-w-4xl w-full">
-        <div className="text-center lg:text-left lg:flex-1">
-          <h1 className="text-3xl lg:text-4xl font-bold text-primary">Login</h1>
-          <p className="py-6">Please enter your email and password to login.</p>
+        <div className="text-center lg:text-left lg:flex-1 text-white">
+          <h1 className="text-3xl lg:text-4xl font-bold">
+            {isRegisterMode
+              ? "Bergabung dengan Kami!"
+              : "Selamat Datang Kembali!"}
+          </h1>
+          <p className="py-6 px-5 lg:px-0 text-lg leading-relaxed">
+            {isRegisterMode
+              ? "Daftar akun untuk mengakses produk dan layanan kami yang luar biasa. Nikmati navigasi yang mulus dan transaksi yang aman!"
+              : "Masuk ke akun Anda untuk mengakses produk dan layanan kami yang luar biasa. Nikmati navigasi yang mulus dan transaksi yang aman!"}
+          </p>
         </div>
-        <div className="card w-fit max-w-sm shadow-2xl bg-base-100 flex-1">
-          <form className="card-body" onSubmit={handleLogin}>
+        <div className="card w-fit max-w-sm shadow-2xl bg-base-100 bg-opacity-60 flex-1">
+          <form
+            className="card-body"
+            onSubmit={isRegisterMode ? handleRegister : handleLogin}
+          >
+            {isRegisterMode && (
+              <div className="form-control">
+                <Label title="Nama" />
+                <Input
+                  type="text"
+                  placeholder="Nama"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
+                />
+              </div>
+            )}
             <div className="form-control">
               <Label title="Email" />
               <Input
@@ -85,34 +151,48 @@ const AuthLayout = () => {
               />
             </div>
             <div className="form-control">
-              <Label title="Password" />
+              <Label title="Kata Sandi" />
               <Input
                 type="password"
-                placeholder="Password"
+                placeholder="Kata Sandi"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <label className="label">
-                <a
-                  href="#"
-                  className="label-text-alt link link-hover no-underline font-bold text-primary"
-                >
-                  Forgot password?
-                </a>
-              </label>
+              {!isRegisterMode && (
+                <label className="label">
+                  <a
+                    href="#"
+                    className="label-text-alt link link-hover no-underline font-bold text-primary"
+                  >
+                    Lupa kata sandi?
+                  </a>
+                </label>
+              )}
             </div>
+            {isRegisterMode && (
+              <div className="form-control">
+                <Label title="Konfirmasi Kata Sandi" />
+                <Input
+                  type="password"
+                  placeholder="Konfirmasi Kata Sandi"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+              </div>
+            )}
             <div className="form-control mt-6">
-              <Button text="Login" />
+              <Button text={isRegisterMode ? "Daftar" : "Masuk"} />
             </div>
             <div className="form-control mt-4 text-center">
-              <p>
-                Don't have an account yet?{" "}
+              <p className="text-white">
+                {!isRegisterMode ? "Belum punya akun? " : "Sudah punya akun? "}
                 <Link
-                  to="/register"
+                  to={isRegisterMode ? "/login" : "/register"}
                   className="text-primary font-bold no-underline hover:underline"
                 >
-                  Register here
+                  {isRegisterMode ? "Masuk di sini" : "Daftar di sini"}
                 </Link>
               </p>
             </div>

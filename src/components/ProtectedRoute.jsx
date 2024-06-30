@@ -1,12 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { AuthContext } from "../contexts/AuthContext";
 
 const ProtectedRoute = ({ element: Component, role }) => {
-  const userRole = useSelector((state) => state.auth.role);
+  const { role: userRole } = useContext(AuthContext);
 
-  if (role === "ADMIN" && userRole !== "ADMIN") {
-    return <Navigate to="/products" replace />;
+  if (!userRole) {
+    // Jika role kosong, artinya pengguna belum login
+    return <Navigate to="/login" />;
+  }
+
+  if (role && role.toUpperCase() !== userRole.toUpperCase()) {
+    // Jika role tidak sesuai dengan yang diharapkan
+    return <Navigate to="/login" />;
   }
 
   return <Component />;

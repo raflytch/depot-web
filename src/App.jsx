@@ -1,3 +1,5 @@
+// App.jsx
+
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NotFound from "./pages/404";
@@ -13,16 +15,21 @@ const App = () => {
     <Router>
       <Routes>
         <Route exact path="/" element={<LandingPage />} />
-        <Route path="/login" element={<AuthLayout />} />
-        <Route path="/register" element={<AuthLayout />} />
-        <Route path="/products" element={<ProductPage />} />
         <Route
-          path="/dashboard"
-          element={<ProtectedRoute element={<UserDashboard />} role="user" />}
+          path="/login"
+          element={<AuthLayout mode="login" />} // Mode login
+        />
+        <Route
+          path="/register"
+          element={<AuthLayout mode="register" />} // Mode registrasi
+        />
+        <Route
+          path="/products"
+          element={<ProtectedRoute element={<ProductPage />} role="USER" />}
         />
         <Route
           path="/admin/dashboard"
-          element={<ProtectedRoute element={<AdminDashboard />} role="admin" />}
+          element={<ProtectedRoute element={<AdminDashboard />} role="ADMIN" />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>
