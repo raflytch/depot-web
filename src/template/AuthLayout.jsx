@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { jwtDecode } from "jwt-decode";
-import { loginSuccess } from "../reducers/authActions";
 
 const AuthLayout = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -36,9 +33,6 @@ const AuthLayout = () => {
         // Decode the token to get the role
         const decodedToken = jwtDecode(data.access_token);
         const userRole = decodedToken.role;
-
-        // Dispatch action to save role in Redux state
-        dispatch(loginSuccess(userRole));
 
         // Show success message
         Swal.fire({
