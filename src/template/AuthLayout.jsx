@@ -30,27 +30,27 @@ const AuthLayout = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Save access token to cookies
-        Cookies.set("access_token", data.access_token, { expires: 30 }); // Set cookie to expire in 30 days
+        // nyimpen token akses ke cookie
+        Cookies.set("access_token", data.access_token, { expires: 30 });
 
-        // Decode the token to get the role
+        // token untuk mendapatkan peran
         const decodedToken = jwtDecode(data.access_token);
         const userRole = decodedToken.role;
 
-        // Dispatch action to save role in Redux state
+        // ini buat ngirim aksi untuk menyimpan peran dalam status Redux
         dispatch(loginSuccess(userRole));
 
-        // Show success message
+        // ini buat alert kalo sukses
         Swal.fire({
           icon: "success",
           title: "Login Successful",
           text: "You have successfully logged in.",
         }).then(() => {
-          // Navigate to appropriate dashboard based on role
-          if (userRole === "admin") {
+          // Navigate to appropriate page based on role
+          if (userRole === "ADMIN") {
             navigate("/admin/dashboard");
           } else {
-            navigate("/dashboard");
+            navigate("/products");
           }
         });
       } else {

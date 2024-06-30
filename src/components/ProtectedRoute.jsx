@@ -2,14 +2,14 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const ProtectedRoute = ({ element, role }) => {
-  const { role: userRole } = useSelector((state) => state.auth);
+const ProtectedRoute = ({ element: Component, role }) => {
+  const userRole = useSelector((state) => state.auth.role);
 
-  if (userRole !== "ADMIN") {
-    return <Navigate to="/login" replace />;
+  if (role === "ADMIN" && userRole !== "ADMIN") {
+    return <Navigate to="/products" replace />;
   }
 
-  return element;
+  return <Component />;
 };
 
 export default ProtectedRoute;
