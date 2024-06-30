@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
-const ProtectedRoute = ({ element: Component, role }) => {
+const ProtectedRoute = ({ element, role }) => {
   const { role: userRole } = useContext(AuthContext);
 
   if (!userRole) {
@@ -15,7 +15,9 @@ const ProtectedRoute = ({ element: Component, role }) => {
     return <Navigate to="/login" />;
   }
 
-  return <Component />;
+  return <>
+    {element}
+    </>;
 };
 
 export default ProtectedRoute;
