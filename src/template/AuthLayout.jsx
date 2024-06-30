@@ -6,7 +6,7 @@ import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import imgLogin from "../assets/img/bgLogin.jpg"; // Import gambar latar belakang
-import { jwtDecode } from "jwt-decode"; // Perbaikan impor
+import jwtDecode from "jwt-decode"; // Impor yang benar
 
 const AuthLayout = ({ mode }) => {
   const navigate = useNavigate();
@@ -44,11 +44,11 @@ const AuthLayout = ({ mode }) => {
           title: "Login Berhasil",
           text: "Anda berhasil masuk ke akun Anda.",
         }).then(() => {
-          // Arahkan ke dashboard yang sesuai berdasarkan peran (role) pengguna
-          if (userRole === "admin") {
-            navigate("/admin/dashboard");
-          } else {
+          // Arahkan ke route yang sesuai berdasarkan peran (role) pengguna
+          if (userRole === "ADMIN") {
             navigate("/dashboard");
+          } else {
+            navigate("/products");
           }
         });
       } else {
