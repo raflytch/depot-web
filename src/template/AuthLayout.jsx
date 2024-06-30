@@ -6,7 +6,7 @@ import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import imgLogin from "../assets/img/bgLogin.jpg"; // Import gambar latar belakang
-import jwtDecode from "jwt-decode";
+import { jwtDecode } from "jwt-decode"; // Perbaikan impor
 
 const AuthLayout = ({ mode }) => {
   const navigate = useNavigate();
