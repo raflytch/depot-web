@@ -1,5 +1,3 @@
-// AuthLayout.jsx
-
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
@@ -8,7 +6,7 @@ import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import imgLogin from "../assets/img/bgLogin.jpg"; // Import gambar latar belakang
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 const AuthLayout = ({ mode }) => {
   const navigate = useNavigate();
@@ -22,7 +20,6 @@ const AuthLayout = ({ mode }) => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
-      // Logika untuk proses login
       const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: {
@@ -34,11 +31,33 @@ const AuthLayout = ({ mode }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Handle login success
-        // ...
+        // Simpan token akses ke dalam cookies
+        Cookies.set("access_token", data.access_token, { expires: 30 }); // Set cookie untuk kedaluwarsa dalam 30 hari
+
+        // Decode token untuk mendapatkan peran (role) pengguna
+        const decodedToken = jwtDecode(data.access_token);
+        const userRole = decodedToken.role;
+
+        // Tampilkan pesan sukses
+        Swal.fire({
+          icon: "success",
+          title: "Login Berhasil",
+          text: "Anda berhasil masuk ke akun Anda.",
+        }).then(() => {
+          // Arahkan ke dashboard yang sesuai berdasarkan peran (role) pengguna
+          if (userRole === "admin") {
+            navigate("/admin/dashboard");
+          } else {
+            navigate("/dashboard");
+          }
+        });
       } else {
-        // Handle login failure
-        // ...
+        // Tampilkan pesan error
+        Swal.fire({
+          icon: "error",
+          title: "Login Gagal",
+          text: data.message || "Login gagal. Silakan coba lagi.",
+        });
       }
     } catch (error) {
       console.error("Error saat login:", error);
