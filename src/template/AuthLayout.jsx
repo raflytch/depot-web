@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { jwtDecode } from "jwt-decode";
-import { loginSuccess } from "../reducers/authActions";
 
 const AuthLayout = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -30,27 +27,24 @@ const AuthLayout = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // nyimpen token akses ke cookie
-        Cookies.set("access_token", data.access_token, { expires: 30 });
+        // Save access token to cookies
+        Cookies.set("access_token", data.access_token, { expires: 30 }); // Set cookie to expire in 30 days
 
-        // token untuk mendapatkan peran
+        // Decode the token to get the role
         const decodedToken = jwtDecode(data.access_token);
         const userRole = decodedToken.role;
 
-        // ini buat ngirim aksi untuk menyimpan peran dalam status Redux
-        dispatch(loginSuccess(userRole));
-
-        // ini buat alert kalo sukses
+        // Show success message
         Swal.fire({
           icon: "success",
           title: "Login Successful",
           text: "You have successfully logged in.",
         }).then(() => {
-          // Navigate to appropriate page based on role
-          if (userRole === "ADMIN") {
+          // Navigate to appropriate dashboard based on role
+          if (userRole === "admin") {
             navigate("/admin/dashboard");
           } else {
-            navigate("/products");
+            navigate("/dashboard");
           }
         });
       } else {
