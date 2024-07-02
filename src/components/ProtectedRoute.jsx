@@ -6,10 +6,6 @@ import Cookies from "js-cookie";
 const ProtectedRoute = ({ element, role }) => {
   const { role: _role, token } = useContext(AuthContext);
 
-  console.log(token);
-  console.log(_role);
-  console.log(role);
-
   if (!_role) {
     // Jika role kosong, artinya pengguna belum login
     return <Navigate to="/login" />;

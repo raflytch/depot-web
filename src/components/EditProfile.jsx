@@ -1,120 +1,71 @@
-import React, { useState, useContext } from "react";
-import Swal from "sweetalert2";
-import { BsPencilSquare } from "react-icons/bs";
-import { AuthContext, AuthDispatchContext } from "../contexts/AuthContext";
+import {useContext, useRef, useState} from 'react';
+import Avatar from "./Avatar.jsx";
+import {AuthContext} from "../contexts/AuthContext.jsx";
+import {BsPencilSquare} from "react-icons/bs";
 
-const EditProfile = () => {
-  const { nama: initialName, alamat: initialAddress } = useContext(AuthContext);
-  const dispatch = useContext(AuthDispatchContext);
+const EditProfile = function() {
+    const { name, email, role, alamat } = useContext(AuthContext);
+    const [inputName, setInputName] = useState("Jongkook");
+    const [inputAlamat, setInputAlamat] = useState("");
+    const [editable, setEditable] = useState(false);
 
-  const [name, setName] = useState(initialName);
-  const [address, setAddress] = useState(initialAddress);
-  const [isNameEditing, setIsNameEditing] = useState(false);
-  const [isAddressEditing, setIsAddressEditing] = useState(false);
+    // Logic for toggle editing
+    const toggleEdit = () => {
+        setEditable(!editable)
+        setInputName("Jongkook");
+    }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Handle the form submission logic here
-    // For example, call an API to update the user's profile
-
-    Swal.fire({
-      icon: "success",
-      title: "Profile updated!",
-      text: "Your profile has been updated successfully.",
-    });
-  };
-
-  const handleNameChange = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleAddressChange = (e) => {
-    setAddress(e.target.value);
-  };
-
-  const enableNameEditing = () => {
-    setIsNameEditing(true);
-  };
-
-  const enableAddressEditing = () => {
-    setIsAddressEditing(true);
-  };
-
-  const renderInputWithIcon = (
-    placeholder,
-    value,
-    onChange,
-    disabled,
-    enableEditing
-  ) => (
-    <div className="relative">
-      <input
-        type="text"
-        value={value}
-        onChange={onChange}
-        className={`w-full p-2 border border-gray-300 rounded ${
-          disabled ? "bg-gray-100" : ""
-        }`}
-        placeholder={placeholder}
-        disabled={disabled}
-        required
-      />
-      {!disabled && (
-        <BsPencilSquare
-          className="absolute top-2 right-2 text-gray-500 cursor-pointer"
-          onClick={enableEditing}
-        />
-      )}
-    </div>
-  );
-
-  return (
-    <div className="max-w-md mx-auto mt-10">
-      <div className="flex justify-center mb-4">
-        <div className="avatar online">
-          <div className="w-16 rounded-full">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
-              alt="Avatar"
-            />
-          </div>
-        </div>
-      </div>
-      <h2 className="text-2xl font-bold mb-5">Edit Profile</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="name">
-            Name
-          </label>
-          {renderInputWithIcon(
-            "Enter your name",
-            name,
-            handleNameChange,
-            !isNameEditing,
-            enableNameEditing
-          )}
-        </div>
-        <div className="mb-4">
-          <label className="block text-sm font-bold mb-2" htmlFor="address">
-            Address
-          </label>
-          {renderInputWithIcon(
-            "Enter your address",
-            address,
-            handleAddressChange,
-            !isAddressEditing,
-            enableAddressEditing
-          )}
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-        >
-          Update Profile
-        </button>
-      </form>
-    </div>
-  );
-};
+    return (
+        <main className="min-h-screen bg-white py-6 px-10 flex flex-col gap-8">
+            <h1 className="text-4xl text-primary font-bold ">
+                Your Profile
+            </h1>
+            <Avatar className="scale-[2] origin-top-left mb-14"/>
+            <div className="flex justify-between items-start">
+                <div className="flex-col gap-5">
+                    <div>
+                        <h2 className="text-lg text-primary">
+                            Nama
+                        </h2>
+                        {editable ? (
+                            <input type="text" value={inputName} onChange={(e) => {
+                                setInputName(e.target.value)
+                            }} className="input bg-white"/>
+                        ) : (
+                            <h3 className="text-xl text-primary-content">
+                                Jongkook
+                            </h3>
+                        )}
+                    </div>
+                    <div>
+                        <h2 className="text-lg text-primary">
+                            Email
+                        </h2>
+                        <h3 className="text-xl text-primary-content">
+                            {email}
+                        </h3>
+                    </div>
+                    <div>
+                        <h2 className="text-lg text-primary">
+                            Alamat
+                        </h2>
+                        {editable ? (
+                            <input type="text" value={alamat} onChange={(e) => {
+                                setInputAlamat(e.target.value)
+                            }} className="input bg-white"/>
+                        ) : (
+                            <h3 className="text-xl text-primary-content">
+                                Jongkook
+                            </h3>
+                        )}
+                    </div>
+                </div>
+                <button onClick={toggleEdit}>
+                    <BsPencilSquare size={25}/>
+                </button>
+            </div>
+        </main>
+    )
+}
 
 export default EditProfile;

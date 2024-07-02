@@ -25,7 +25,7 @@ const App = () => {
         />
         <Route
           path="/profile"
-          element={<ProtectedRoute element={<EditProfile />} />}
+          element={<ProtectedRoute element={<EditProfile />} role="USER" />}
         />
         <Route path="*" element={<NotFound />} />
       </Routes>

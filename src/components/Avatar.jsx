@@ -2,7 +2,9 @@ import React, { useState, useContext } from "react";
 import AvatarManageAccount from "./AvatarManageAccount";
 import { AuthContext } from "../contexts/AuthContext";
 
-const Avatar = () => {
+const Avatar = (
+    {className}
+) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { nama, alamat } = useContext(AuthContext);
 
@@ -11,7 +13,7 @@ const Avatar = () => {
   };
 
   return (
-    <div className="relative">
+    <div className={"relative " + className}>
       <div className="avatar online" onClick={handleAvatarClick}>
         <div className="w-16 rounded-full">
           <img
