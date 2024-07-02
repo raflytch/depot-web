@@ -2,24 +2,45 @@ import React, { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const AvatarManageAccount = () => {
   const { token } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    const res = await fetch("http://localhost:3000/auth/logout", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const res = await fetch("http://localhost:3000/auth/logout", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (res.status !== 200) {
-      return alert("Logout gagal");
+      if (res.status !== 200) {
+        throw new Error("Logout gagal");
+      }
+
+      Cookies.remove("access_token");
+      navigate("/");
+
+      // SweetAlert untuk logout berhasil
+      Swal.fire({
+        icon: "success",
+        title: "Logout Berhasil",
+        text: "Anda telah berhasil logout dari akun Anda.",
+        confirmButtonText: "Oke",
+      });
+    } catch (error) {
+      console.error("Error saat logout:", error);
+
+      // SweetAlert untuk logout gagal
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Logout gagal. Silakan coba lagi nanti.",
+        confirmButtonText: "Tutup",
+      });
     }
-
-    Cookies.remove("access_token");
-    navigate("/");
   };
 
   const handleProfileClick = () => {

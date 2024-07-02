@@ -1,7 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import homeImage from "../assets/img/home.jpg";
+import { FaArrowRight } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Home = () => {
+  const navigate = useNavigate();
+  const { token } = useContext(AuthContext); // Mengakses token dari AuthContext
+
+  const handleStartClick = () => {
+    navigate("/login");
+  };
+
   return (
     <section
       className="bg-center bg-no-repeat"
@@ -21,29 +31,19 @@ const Home = () => {
           sehari-hari dengan kualitas tinggi dan harga terjangkau. Kepuasan Anda
           adalah kebanggaan kami.
         </p>
-        <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 mx-7">
-          <a
-            href="#"
-            className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900 hover:transition hover:duration-500"
-          >
-            Mulai
-            <svg
-              className="w-3.5 h-3.5 ms-2 rtl:rotate-180"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 14 10"
+        {!token && ( // Menampilkan tombol hanya jika tidak ada token
+          <div className="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 mx-7">
+            <button
+              onClick={handleStartClick}
+              className="inline-flex justify-center items-center py-3 px-5 text-base font-medium text-center text-white rounded-lg bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-900 hover:transition hover:duration-500"
             >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-              />
-            </svg>
-          </a>
-        </div>
+              Mulai{" "}
+              <span className="ml-2">
+                <FaArrowRight size={17} />
+              </span>
+            </button>
+          </div>
+        )}
       </div>
     </section>
   );

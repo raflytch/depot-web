@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react"; // Tambahkan useContext di sini
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Link } from "react-scroll";
 import { useNavigate } from "react-router-dom";
@@ -6,11 +6,20 @@ import Button from "./Button";
 import logo from "../assets/img/logo.png";
 import Avatar from "../components/Avatar";
 import { AuthContext } from "../contexts/AuthContext";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { token } = useContext(AuthContext); // Get token from context
+
+  useEffect(() => {
+    AOS.init({
+      once: true, // Animasi hanya terjadi sekali
+      duration: 800, // Durasi animasi (ms)
+    });
+  }, []);
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -25,7 +34,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white border-gray-200 dark:bg-gray-900 sticky top-0 z-50 shadow-lg">
+    <nav
+      className="bg-white border-gray-200 dark:bg-gray-900 sticky top-0 z-50 shadow-lg"
+      data-aos="fade-down"
+    >
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src={logo} className="h-12" alt="Depot Anugrah Logo" />

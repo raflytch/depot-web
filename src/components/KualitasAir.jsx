@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
+import Swal from "sweetalert2";
 
 const KualitasAir = () => {
   const [kualitasAir, setKualitasAir] = useState([]);
@@ -7,30 +8,56 @@ const KualitasAir = () => {
   const handleAddKualitas = async (event) => {
     event.preventDefault();
 
-    const accessToken = Cookies.get("access_token");
-    const url = "http://localhost:3000/auth/kualitas-air";
+    // Tampilkan SweetAlert untuk konfirmasi
+    Swal.fire({
+      title: "Tambah Kualitas Air?",
+      text: "Apakah Anda yakin ingin menambahkan kualitas air ini?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Tambahkan!",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const accessToken = Cookies.get("access_token");
+        const url = "http://localhost:3000/auth/kualitas-air";
 
-    const res = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      body: JSON.stringify({
-        tingkat: event.target.tingkat.value,
-      }),
+        const res = await fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: JSON.stringify({
+            tingkat: event.target.tingkat.value,
+            keterangan: event.target.keterangan.value,
+          }),
+        });
+
+        if (res.ok) {
+          const newKualitas = {
+            tingkat: event.target.tingkat.value,
+            keterangan: event.target.keterangan.value,
+          };
+          setKualitasAir([...kualitasAir, newKualitas]);
+          event.target.reset();
+
+          // Tampilkan SweetAlert untuk sukses menambahkan kualitas air
+          Swal.fire({
+            icon: "success",
+            title: "Berhasil!",
+            text: "Kualitas air telah ditambahkan.",
+          });
+        } else {
+          Swal.fire({
+            icon: "error",
+            title: "Gagal!",
+            text: "Gagal menambahkan kualitas air. Silakan coba lagi.",
+          });
+        }
+      }
     });
-
-    if (res.ok) {
-      const newKualitas = {
-        tingkat: event.target.tingkat.value,
-        keterangan: event.target.keterangan.value,
-      };
-      setKualitasAir([...kualitasAir, newKualitas]);
-      event.target.reset();
-    } else {
-      alert("Failed to add kualitas air");
-    }
   };
 
   return (

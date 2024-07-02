@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
@@ -8,6 +8,8 @@ import Button from "../components/Button";
 import imgLogin from "../assets/img/bgLogin.jpg"; // Import gambar latar belakang
 import { jwtDecode } from "jwt-decode";
 import { AuthDispatchContext } from "../contexts/AuthContext.jsx"; // Impor yang benar
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const AuthLayout = ({ mode }) => {
   const navigate = useNavigate();
@@ -18,6 +20,13 @@ const AuthLayout = ({ mode }) => {
   const dispatch = useContext(AuthDispatchContext);
 
   const isRegisterMode = mode === "register";
+
+  useEffect(() => {
+    AOS.init({
+      once: true, // Animasi hanya terjadi sekali
+      duration: 800, // Durasi animasi (ms)
+    });
+  }, []);
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -58,7 +67,7 @@ const AuthLayout = ({ mode }) => {
         }).then(() => {
           // Arahkan ke route yang sesuai berdasarkan peran (role) pengguna
           if (userRole === "ADMIN") {
-            navigate("/dashboard");
+            navigate("/admin");
           } else {
             navigate("/products");
           }
@@ -136,10 +145,11 @@ const AuthLayout = ({ mode }) => {
 
   return (
     <div
-      className="hero min-h-screen w-full bg-cover bg-center flex items-center justify-center"
+      className="hero min-h-screen w-full bg-cover bg-center flex items-center justify-center py-5"
       style={{
         backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(${imgLogin})`,
       }}
+      data-aos="fade-down" // Tambahkan atribut data-aos di sini
     >
       <div className="hero-content flex-col lg:flex-row-reverse gap-10 lg:gap-20 p-1 max-w-4xl w-full">
         <div className="text-center lg:text-left lg:flex-1 text-white">

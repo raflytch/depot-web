@@ -1,10 +1,12 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import Avatar from "./Avatar.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { BsPencilSquare } from "react-icons/bs";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { IoMdArrowRoundBack } from "react-icons/io";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const EditProfile = function () {
   const navigate = useNavigate();
@@ -12,6 +14,13 @@ const EditProfile = function () {
   const [inputName, setInputName] = useState(nama);
   const [inputAlamat, setInputAlamat] = useState(alamat);
   const [editable, setEditable] = useState(false);
+
+  useEffect(() => {
+    AOS.init({
+      once: true, // Animasi hanya terjadi sekali
+      duration: 800, // Durasi animasi (ms)
+    });
+  }, []);
 
   // Function to toggle editing mode
   const toggleEdit = () => {
@@ -43,11 +52,12 @@ const EditProfile = function () {
         alamat: inputAlamat,
       });
 
-      // Show success message
+      // Show success message in Bahasa Indonesia
       Swal.fire({
         icon: "success",
-        title: "Changes Saved!",
-        text: "Your profile information has been updated successfully.",
+        title: "Perubahan Tersimpan!",
+        text: "Informasi profil Anda berhasil diperbarui.",
+        confirmButtonText: "Oke",
       });
 
       // Exit editing mode
@@ -57,54 +67,58 @@ const EditProfile = function () {
       Swal.fire({
         icon: "error",
         title: "Oops...",
-        text: "Failed to update profile. Please try again later.",
+        text: "Gagal memperbarui profil. Silakan coba lagi nanti.",
+        confirmButtonText: "Tutup",
       });
     }
   };
 
   // Function to handle navigate back to home
   const handleNavigateHome = () => {
-    navigate("/"); // Navigasi ke route "/"
+    navigate("/");
   };
 
   return (
-    <main className="min-h-screen max-w-screen overflow-hidden bg-white py-6 px-10 flex flex-col gap-8">
+    <main
+      className="min-h-screen max-w-screen overflow-hidden bg-white py-6 px-10 flex flex-col gap-8 rounded-lg shadow-lg"
+      data-aos="fade-down"
+    >
       <div className="flex items-center mb-8">
         <button
           onClick={handleNavigateHome}
-          className="bg-gray-300 text-gray-800 px-3 py-2 rounded hover:bg-gray-400"
+          className="bg-white text-primary px-3 py-2 rounded hover:bg-gray-200"
         >
           <IoMdArrowRoundBack size={24} />
         </button>
       </div>
-      <h1 className="text-4xl text-primary font-bold ml-4">Your Profile</h1>
-      <Avatar className="scale-[2] origin-top-left mb-14" />
+      <h1 className="text-4xl text-primary font-bold">Profil Anda</h1>
+      <Avatar className="scale-150 origin-top-left mb-14" />
       <div className="flex flex-row justify-between items-start gap-8">
-        <div className="flex flex-col gap-5 w-full md:w-2/3">
+        <div className="flex flex-col gap-5 w-full md:w-5/6">
           <div className="h-16">
-            <h2 className="text-lg text-primary">Nama</h2>
+            <h2 className="text-lg text-primary font-bold">Nama</h2>
             {editable ? (
               <input
                 type="text"
                 value={inputName}
                 onChange={(e) => setInputName(e.target.value)}
-                className="input bg-white"
+                className="input bg-white border-2 border-primary rounded px-3 py-2 focus:outline-none focus:border-blue-600 w-full"
               />
             ) : (
               <h3 className="text-xl text-primary-content">{nama}</h3>
             )}
           </div>
           <div className="h-16">
-            <h2 className="text-lg text-primary">Email</h2>
+            <h2 className="text-lg text-primary font-bold">Email</h2>
             <h3 className="text-xl text-primary-content">{email}</h3>
           </div>
           <div className="h-auto">
-            <h2 className="text-lg text-primary">Alamat</h2>
+            <h2 className="text-lg text-primary font-bold">Alamat</h2>
             {editable ? (
               <textarea
                 value={inputAlamat}
                 onChange={(e) => setInputAlamat(e.target.value)}
-                className="input bg-white h-32 resize-none"
+                className="input bg-white border-2 border-primary rounded px-3 py-2 h-32 resize-none focus:outline-none focus:border-blue-600 w-full"
               />
             ) : (
               <h3 className="text-xl text-primary-content">{alamat}</h3>
@@ -112,7 +126,10 @@ const EditProfile = function () {
           </div>
         </div>
         <div className="flex items-center justify-end w-full md:w-auto">
-          <button onClick={toggleEdit}>
+          <button
+            onClick={toggleEdit}
+            className="text-primary hover:text-blue-600"
+          >
             <BsPencilSquare size={25} />
           </button>
         </div>
@@ -120,9 +137,9 @@ const EditProfile = function () {
       {editable && (
         <button
           onClick={handleSaveChanges}
-          className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 mt-8"
+          className="bg-primary text-white px-6 py-3 rounded-lg hover:bg-blue-600 mt-8 transition-colors duration-300"
         >
-          Save Changes
+          Simpan Perubahan
         </button>
       )}
     </main>

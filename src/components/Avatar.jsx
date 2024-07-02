@@ -1,12 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import AvatarManageAccount from "./AvatarManageAccount";
 import { AuthContext } from "../contexts/AuthContext";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-const Avatar = (
-    {className}
-) => {
+const Avatar = ({ className }) => {
   const [showDropdown, setShowDropdown] = useState(false);
   const { nama, alamat } = useContext(AuthContext);
+
+  useEffect(() => {
+    AOS.init({
+      once: true, // Animasi hanya terjadi sekali
+      duration: 800, // Durasi animasi (ms)
+    });
+  }, []);
 
   const handleAvatarClick = () => {
     setShowDropdown(!showDropdown);
@@ -15,7 +22,7 @@ const Avatar = (
   return (
     <div className={"relative " + className}>
       <div className="avatar online" onClick={handleAvatarClick}>
-        <div className="w-16 rounded-full">
+        <div className="ml-3 lg:ml-0 w-12 rounded-full">
           <img
             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
             alt="Avatar"
@@ -23,7 +30,10 @@ const Avatar = (
         </div>
       </div>
       {showDropdown && (
-        <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 shadow-lg rounded-lg">
+        <div
+          className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 shadow-lg rounded-lg"
+          data-aos="fade-down" // Tambahkan atribut AOS
+        >
           <AvatarManageAccount />
         </div>
       )}

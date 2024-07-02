@@ -1,4 +1,5 @@
 import React from "react";
+import Table from "../components/Table"; // Import komponen Tabel
 
 const Transaksi = () => {
   return (
@@ -7,6 +8,9 @@ const Transaksi = () => {
         Daftar Transaksi
       </h1>
       <p>Daftar transaksi yang telah dilakukan.</p>
+
+      {/* Memasukkan komponen Tabel */}
+      <Table />
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Navbar from "../components/Navbar";
 import Home from "../components/Home";
 import HeroRight from "../components/HeroRight";
@@ -9,15 +9,24 @@ import HeroLeft from "../components/HeroLeft";
 import Maps from "../components/Maps";
 import FormContact from "../template/FormContact";
 import logo from "../assets/img/logo.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const LandingPage = () => {
+  useEffect(() => {
+    AOS.init({
+      once: true, // Hanya animasi satu kali saat scroll
+      duration: 800, // Durasi animasi (ms)
+    });
+  }, []);
+
   return (
     <>
       <Navbar img={logo} />
-      <section id="home">
+      <section id="home" data-aos="fade-up">
         <Home />
       </section>
-      <section id="heroRight">
+      <section id="heroRight" data-aos="fade-up">
         <HeroRight
           img={img}
           title={"Delapan Tahun Melayani dengan Dedikasi"}
@@ -26,7 +35,7 @@ const LandingPage = () => {
           }
         />
       </section>
-      <section id="heroLeft">
+      <section id="heroLeft" data-aos="fade-up">
         <HeroLeft
           img={img2}
           title={"Komitmen Terhadap Keberlanjutan"}
@@ -36,13 +45,13 @@ const LandingPage = () => {
           bgColor={"bg-primary"}
         />
       </section>
-      <section id="maps">
+      <section id="maps" data-aos="fade-up">
         <Maps />
       </section>
-      <section id="contact">
+      <section id="contact" data-aos="fade-up">
         <FormContact />
       </section>
-      <Footer img={logo} />
+      <Footer img={logo} data />
     </>
   );
 };

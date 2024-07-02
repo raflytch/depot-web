@@ -2,37 +2,37 @@ import React from "react";
 
 const Footer = ({ img }) => {
   return (
-    <footer class="bg-white rounded-lg dark:bg-gray-900">
-      <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8 text-center">
-        <div class="flex flex-col items-center lg:flex-row justify-between">
-          <div class="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
-            <img src={img} class="h-12" alt="PKM Logo" />
-            <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
+    <footer className="bg-white rounded-lg dark:bg-gray-900" data-aos="fade-up">
+      <div className="w-full max-w-screen-xl mx-auto p-4 md:py-8 text-center">
+        <div className="flex flex-col items-center lg:flex-row justify-between">
+          <div className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse">
+            <img src={img} className="h-12" alt="PKM Logo" />
+            <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
               Depot Anugrah
             </span>
           </div>
-          <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
+          <ul className="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400">
             <li>
-              <a href="#" class="hover:underline me-4 md:me-6">
+              <a href="#" className="hover:underline me-4 md:me-6">
                 About
               </a>
             </li>
             <li>
-              <a href="#" class="hover:underline me-4 md:me-6">
+              <a href="#" className="hover:underline me-4 md:me-6">
                 Privacy Policy
               </a>
             </li>
             <li>
-              <a href="#" class="hover:underline">
+              <a href="#" className="hover:underline">
                 Contact
               </a>
             </li>
           </ul>
         </div>
-        <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-        <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
+        <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+        <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
           © 2024{" "}
-          <a href="#" class="hover:underline">
+          <a href="#" className="hover:underline">
             Refill Gallon Bottle™
           </a>
           . All Rights Reserved.

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import products from "../utils/product";
+import Swal from "sweetalert2";
 
 const Barang = () => {
   const [stokBarang, setStokBarang] = useState([]);
@@ -10,8 +11,30 @@ const Barang = () => {
       nama: event.target.nama.value,
       jumlah: event.target.jumlah.value,
     };
-    setStokBarang([...stokBarang, newBarang]);
-    event.target.reset();
+
+    // Tampilkan SweetAlert untuk konfirmasi
+    Swal.fire({
+      title: "Tambah Barang?",
+      text: "Apakah Anda yakin ingin menambahkan barang ini?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Tambahkan!",
+      cancelButtonText: "Batal",
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        setStokBarang([...stokBarang, newBarang]);
+        event.target.reset();
+
+        // Tampilkan SweetAlert untuk sukses menambahkan barang
+        Swal.fire({
+          icon: "success",
+          title: "Berhasil!",
+          text: "Barang telah ditambahkan.",
+        });
+      }
+    });
   };
 
   const groupedProducts = products.reduce((acc, product) => {
@@ -55,11 +78,26 @@ const Barang = () => {
           Tambah Barang
         </button>
       </form>
-      <ul>
-        {stokBarang.map((barang, index) => (
-          <li key={index}>{`${barang.nama} - ${barang.jumlah}`}</li>
-        ))}
-      </ul>
+      <div className="overflow-x-auto">
+        <table className="table">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Barang</th>
+              <th>Jumlah</th>
+            </tr>
+          </thead>
+          <tbody>
+            {stokBarang.map((barang, index) => (
+              <tr key={index}>
+                <td>{index + 1}</td>
+                <td>{barang.nama}</td>
+                <td>{barang.jumlah}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

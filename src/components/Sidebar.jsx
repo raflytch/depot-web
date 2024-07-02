@@ -33,7 +33,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
           timer: 1500,
           showConfirmButton: false,
         }).then(() => {
-          navigate("/admin-login");
+          navigate("/login");
         });
       }
     });
