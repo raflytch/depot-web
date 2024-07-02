@@ -1,42 +1,19 @@
 import React, { useState, useContext } from "react";
 import AvatarManageAccount from "./AvatarManageAccount";
-import { AuthDispatchContext, AuthContext } from "../contexts/AuthContext";
-import Swal from "sweetalert2";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Avatar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
-  const dispatch = useContext(AuthDispatchContext);
   const { nama, alamat } = useContext(AuthContext);
 
   const handleAvatarClick = () => {
     setShowDropdown(!showDropdown);
   };
 
-  const handleAddAddress = async () => {
-    const { value: address } = await Swal.fire({
-      title: "Masukkan Alamat",
-      input: "text",
-      inputLabel: "Alamat",
-      inputPlaceholder: "Masukkan alamat Anda",
-      showCancelButton: true,
-    });
-
-    if (address) {
-      // Dispatch action to set alamat
-      dispatch({
-        type: "set-alamat",
-        alamat: address,
-      });
-      Swal.fire(`Alamat berhasil disimpan: ${address}`);
-    }
-  };
-
   return (
-    <div>
+    <div className="relative">
       <div className="avatar online" onClick={handleAvatarClick}>
         <div className="w-16 rounded-full">
-          {" "}
-          {/* Ubah ukuran avatar menjadi lebih kecil */}
           <img
             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
             alt="Avatar"
@@ -44,9 +21,8 @@ const Avatar = () => {
         </div>
       </div>
       {showDropdown && (
-        <div>
+        <div className="absolute right-0 mt-2 w-52 bg-white border border-gray-200 shadow-lg rounded-lg">
           <AvatarManageAccount />
-          <button onClick={handleAddAddress}>Tambah Alamat</button>
         </div>
       )}
       <div className="text-white">
