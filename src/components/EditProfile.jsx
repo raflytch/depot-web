@@ -3,8 +3,11 @@ import Avatar from "./Avatar.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { BsPencilSquare } from "react-icons/bs";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const EditProfile = function () {
+  const navigate = useNavigate();
   const { token, nama, email, alamat, dispatch } = useContext(AuthContext);
   const [inputName, setInputName] = useState(nama);
   const [inputAlamat, setInputAlamat] = useState(alamat);
@@ -59,13 +62,26 @@ const EditProfile = function () {
     }
   };
 
+  // Function to handle navigate back to home
+  const handleNavigateHome = () => {
+    navigate("/"); // Navigasi ke route "/"
+  };
+
   return (
-    <main className="min-h-screen bg-white py-6 px-10 flex flex-col gap-8">
-      <h1 className="text-4xl text-primary font-bold">Your Profile</h1>
+    <main className="min-h-screen max-w-screen overflow-hidden bg-white py-6 px-10 flex flex-col gap-8">
+      <div className="flex items-center mb-8">
+        <button
+          onClick={handleNavigateHome}
+          className="bg-gray-300 text-gray-800 px-3 py-2 rounded hover:bg-gray-400"
+        >
+          <IoMdArrowRoundBack size={24} />
+        </button>
+      </div>
+      <h1 className="text-4xl text-primary font-bold ml-4">Your Profile</h1>
       <Avatar className="scale-[2] origin-top-left mb-14" />
-      <div className="flex justify-between items-start">
-        <div className="flex-col gap-5">
-          <div>
+      <div className="flex flex-row justify-between items-start gap-8">
+        <div className="flex flex-col gap-5 w-full md:w-2/3">
+          <div className="h-16">
             <h2 className="text-lg text-primary">Nama</h2>
             {editable ? (
               <input
@@ -78,38 +94,37 @@ const EditProfile = function () {
               <h3 className="text-xl text-primary-content">{nama}</h3>
             )}
           </div>
-          <div>
+          <div className="h-16">
             <h2 className="text-lg text-primary">Email</h2>
             <h3 className="text-xl text-primary-content">{email}</h3>
           </div>
-          <div>
+          <div className="h-auto">
             <h2 className="text-lg text-primary">Alamat</h2>
             {editable ? (
-              <input
-                type="text"
+              <textarea
                 value={inputAlamat}
                 onChange={(e) => setInputAlamat(e.target.value)}
-                className="input bg-white"
+                className="input bg-white h-32 resize-none"
               />
             ) : (
               <h3 className="text-xl text-primary-content">{alamat}</h3>
             )}
           </div>
         </div>
-        <div className="flex items-center">
-          {editable && (
-            <button
-              onClick={handleSaveChanges}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 ml-4"
-            >
-              Save Changes
-            </button>
-          )}
-          <button onClick={toggleEdit} className="ml-4">
+        <div className="flex items-center justify-end w-full md:w-auto">
+          <button onClick={toggleEdit}>
             <BsPencilSquare size={25} />
           </button>
         </div>
       </div>
+      {editable && (
+        <button
+          onClick={handleSaveChanges}
+          className="bg-blue-500 text-white px-3 py-2 rounded hover:bg-blue-600 mt-8"
+        >
+          Save Changes
+        </button>
+      )}
     </main>
   );
 };
