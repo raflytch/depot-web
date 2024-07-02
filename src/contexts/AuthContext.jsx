@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useReducer } from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
@@ -34,6 +34,12 @@ function authReducer(state, action) {
         ...state,
         alamat: action.alamat,
       };
+    case "update-profile":
+      return {
+        ...state,
+        nama: action.nama,
+        alamat: action.alamat,
+      };
     default:
       return state;
   }
@@ -51,7 +57,7 @@ const initUser = () => {
         email: decodedToken.email,
         role: decodedToken.role,
         token: token,
-        alamat: "", // Tambahkan state untuk alamat
+        alamat: decodedToken.alamat, // Tambahkan state untuk alamat
       };
     } catch (err) {
       return {
