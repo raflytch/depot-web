@@ -22,6 +22,7 @@ const Avatar = () => {
     });
 
     if (address) {
+      // Dispatch action to set alamat
       dispatch({
         type: "set-alamat",
         alamat: address,
@@ -33,7 +34,9 @@ const Avatar = () => {
   return (
     <div>
       <div className="avatar online" onClick={handleAvatarClick}>
-        <div className="w-24 rounded-full">
+        <div className="w-16 rounded-full">
+          {" "}
+          {/* Ubah ukuran avatar menjadi lebih kecil */}
           <img
             src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
             alt="Avatar"

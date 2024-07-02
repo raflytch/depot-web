@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Swal from "sweetalert2";
+import { BsPencilSquare } from "react-icons/bs";
 
 const EditProfile = () => {
   const [name, setName] = useState("");
@@ -28,6 +29,21 @@ const EditProfile = () => {
     });
   };
 
+  const renderInputWithIcon = (placeholder, value, onChange, id) => (
+    <div className="relative">
+      <input
+        type="text"
+        value={value}
+        onChange={onChange}
+        id={id}
+        className="w-full p-2 border border-gray-300 rounded"
+        placeholder={placeholder}
+        required
+      />
+      <BsPencilSquare className="absolute top-2 right-2 text-gray-500 cursor-pointer" />
+    </div>
+  );
+
   return (
     <div className="max-w-md mx-auto mt-10">
       <h2 className="text-2xl font-bold mb-5">Edit Profile</h2>
@@ -36,40 +52,34 @@ const EditProfile = () => {
           <label className="block text-sm font-bold mb-2" htmlFor="name">
             Name
           </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
+          {renderInputWithIcon(
+            "Enter your name",
+            name,
+            (e) => setName(e.target.value),
+            "name"
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2" htmlFor="oldPassword">
             Old Password
           </label>
-          <input
-            type="password"
-            id="oldPassword"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
+          {renderInputWithIcon(
+            "Enter your old password",
+            oldPassword,
+            (e) => setOldPassword(e.target.value),
+            "oldPassword"
+          )}
         </div>
         <div className="mb-4">
           <label className="block text-sm font-bold mb-2" htmlFor="newPassword">
             New Password
           </label>
-          <input
-            type="password"
-            id="newPassword"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
+          {renderInputWithIcon(
+            "Enter your new password",
+            newPassword,
+            (e) => setNewPassword(e.target.value),
+            "newPassword"
+          )}
         </div>
         <div className="mb-4">
           <label
@@ -78,14 +88,12 @@ const EditProfile = () => {
           >
             Confirm New Password
           </label>
-          <input
-            type="password"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded"
-            required
-          />
+          {renderInputWithIcon(
+            "Confirm your new password",
+            confirmPassword,
+            (e) => setConfirmPassword(e.target.value),
+            "confirmPassword"
+          )}
         </div>
         <button
           type="submit"
