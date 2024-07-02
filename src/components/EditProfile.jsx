@@ -9,6 +9,8 @@ const EditProfile = () => {
 
   const [name, setName] = useState(initialName);
   const [address, setAddress] = useState(initialAddress);
+  const [isNameEditing, setIsNameEditing] = useState(false);
+  const [isAddressEditing, setIsAddressEditing] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,7 +32,21 @@ const EditProfile = () => {
     setAddress(e.target.value);
   };
 
-  const renderInputWithIcon = (placeholder, value, onChange, disabled) => (
+  const enableNameEditing = () => {
+    setIsNameEditing(true);
+  };
+
+  const enableAddressEditing = () => {
+    setIsAddressEditing(true);
+  };
+
+  const renderInputWithIcon = (
+    placeholder,
+    value,
+    onChange,
+    disabled,
+    enableEditing
+  ) => (
     <div className="relative">
       <input
         type="text"
@@ -44,7 +60,10 @@ const EditProfile = () => {
         required
       />
       {!disabled && (
-        <BsPencilSquare className="absolute top-2 right-2 text-gray-500 cursor-pointer" />
+        <BsPencilSquare
+          className="absolute top-2 right-2 text-gray-500 cursor-pointer"
+          onClick={enableEditing}
+        />
       )}
     </div>
   );
@@ -71,7 +90,8 @@ const EditProfile = () => {
             "Enter your name",
             name,
             handleNameChange,
-            false
+            !isNameEditing,
+            enableNameEditing
           )}
         </div>
         <div className="mb-4">
@@ -82,7 +102,8 @@ const EditProfile = () => {
             "Enter your address",
             address,
             handleAddressChange,
-            false
+            !isAddressEditing,
+            enableAddressEditing
           )}
         </div>
         <button
