@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useContext } from "react";
+import { AuthDispatchContext, AuthContext } from "../contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const AvatarManageAccount = () => {
+  const dispatch = useContext(AuthDispatchContext);
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    Cookies.remove("access_token");
+    dispatch({ type: "logged-out" });
+    navigate("/");
+  };
+
   return (
-    <ul
-      tabIndex={0}
-      className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-    >
+    <div className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52">
       <li>
-        <a className="justify-between">
-          Profile
-          <span className="badge">New</span>
-        </a>
+        <a href="/profile">Profil</a>
       </li>
       <li>
-        <a>Logout</a>
+        <a onClick={handleLogout}>Logout</a>
       </li>
-    </ul>
+    </div>
   );
 };
 

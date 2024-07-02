@@ -1,24 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Link } from "react-scroll";
 import { useNavigate } from "react-router-dom";
 import Button from "./Button";
 import logo from "../assets/img/logo.png";
+import Avatar from "../components/Avatar";
+import { AuthContext } from "../contexts/AuthContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const navigate = useNavigate();
+  const { token } = useContext(AuthContext); // Get token from context
 
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const handleLoginClick = () => {
-    navigate("/login"); // Navigate to the login page
+    navigate("/login");
   };
 
   const handleOrderClick = () => {
-    navigate("/products"); // Navigate to the product page
+    navigate("/products");
   };
 
   return (
@@ -102,62 +105,58 @@ const Navbar = () => {
               </Link>
             </li>
             <li>
-              <Button onClick={handleLoginClick} text="Login" />
+              {token ? (
+                <Avatar />
+              ) : (
+                <Button onClick={handleLoginClick} text="Login" />
+              )}
             </li>
           </ul>
         </div>
         <div className="hidden md:flex items-center space-x-4">
-          <ul className="font-medium flex flex-col md:flex-row md:space-x-8 p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <li>
-              <Link
-                to="home"
-                smooth={true}
-                duration={500}
-                className="block py-2 px-3 text-gray-900 rounded cursor-pointer hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                Beranda
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="heroRight"
-                smooth={true}
-                duration={500}
-                className="block py-2 px-3 text-gray-900 rounded cursor-pointer hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                Tentang
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="maps"
-                smooth={true}
-                duration={500}
-                className="block py-2 px-3 text-gray-900 rounded cursor-pointer hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                Outlet
-              </Link>
-            </li>
-            <li>
-              <span
-                className="block py-2 px-3 text-gray-900 rounded cursor-pointer hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-                onClick={handleOrderClick}
-              >
-                Pemesanan
-              </span>
-            </li>
-            <li>
-              <Link
-                to="contact"
-                smooth={true}
-                duration={500}
-                className="block py-2 px-3 text-gray-900 rounded cursor-pointer hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent"
-              >
-                Kontak
-              </Link>
-            </li>
-          </ul>
-          <Button onClick={handleLoginClick} text="Masuk" />
+          <Link
+            to="home"
+            smooth={true}
+            duration={500}
+            className="text-gray-900 dark:text-white cursor-pointer hover:text-blue-700 dark:hover:text-blue-500"
+          >
+            Beranda
+          </Link>
+          <Link
+            to="heroRight"
+            smooth={true}
+            duration={500}
+            className="text-gray-900 dark:text-white cursor-pointer hover:text-blue-700 dark:hover:text-blue-500"
+          >
+            Tentang
+          </Link>
+          <Link
+            to="maps"
+            smooth={true}
+            duration={500}
+            className="text-gray-900 dark:text-white cursor-pointer hover:text-blue-700 dark:hover:text-blue-500"
+          >
+            Outlet
+          </Link>
+          <span
+            className="text-gray-900 dark:text-white cursor-pointer hover:text-blue-700 dark:hover:text-blue-500"
+            onClick={handleOrderClick}
+          >
+            Pemesanan
+          </span>
+          <Link
+            to="contact"
+            smooth={true}
+            duration={500}
+            className="text-gray-900 dark:text-white cursor-pointer hover:text-blue-700 dark:hover:text-blue-500"
+          >
+            Kontak
+          </Link>
+          {token ? (
+            <Avatar />
+          ) : (
+            <Button onClick={handleLoginClick} text="Login" />
+          )}
         </div>
       </div>
     </nav>

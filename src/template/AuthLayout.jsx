@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
@@ -6,7 +6,8 @@ import Label from "../components/Label";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import imgLogin from "../assets/img/bgLogin.jpg"; // Import gambar latar belakang
-import { jwtDecode } from "jwt-decode"; // Impor yang benar
+import { jwtDecode } from "jwt-decode";
+import { AuthDispatchContext } from "../contexts/AuthContext.jsx"; // Impor yang benar
 
 const AuthLayout = ({ mode }) => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const AuthLayout = ({ mode }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const dispatch = useContext(AuthDispatchContext);
 
   const isRegisterMode = mode === "register";
 
@@ -37,6 +39,16 @@ const AuthLayout = ({ mode }) => {
         // Decode token untuk mendapatkan peran (role) pengguna
         const decodedToken = jwtDecode(data.access_token);
         const userRole = decodedToken.role;
+
+        dispatch({
+          type: "logged-in",
+          user: {
+            nama: decodedToken.nama,
+            email: decodedToken.email,
+            role: userRole,
+            token: data.access_token,
+          },
+        });
 
         // Tampilkan pesan sukses
         Swal.fire({
