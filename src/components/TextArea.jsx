@@ -11,7 +11,7 @@ const TextArea = ({ name, value, onChange, placeholder, required }) => {
         value={value}
         onChange={onChange}
         placeholder={placeholder}
-        className="block p-2.5 w-full text-md text-gray-900 rounded-lg border border-gray-300 input resize-none h-32 lg:h-40"
+        className="block p-2.5 w-full text-md text-gray-900 rounded-lg input-bordered input resize-none h-32 lg:h-40"
         required={required}
       ></textarea>
     </div>
