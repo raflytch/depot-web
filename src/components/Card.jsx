@@ -54,7 +54,7 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
     } else {
       // Replace this with your Midtrans integration
       if (window.snap) {
-        snap.pay("97508451-42e5-483d-9052-ed3d68b034c8");
+        window.snap.pay("97508451-42e5-483d-9052-ed3d68b034c8");
       } else {
         Swal.fire({
           icon: "error",
