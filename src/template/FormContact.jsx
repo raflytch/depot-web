@@ -84,7 +84,7 @@ const FormContact = () => {
 
   return (
     <div className="hero min-h-screen bg-white py-10 lg:py-20">
-      <div className="hero-content text-center flex flex-col">
+      <div className="hero-content p-0 text-center flex flex-col">
         <div className="max-w-md lg:max-w-3xl">
           <h1 className="text-5xl font-bold text-primary">Kontak</h1>
           <p className="py-6">
