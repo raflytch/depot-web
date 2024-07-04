@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import NotFound from "./pages/404";
 import LandingPage from "./pages/landingpage";
@@ -9,6 +9,21 @@ import EditProfile from "./components/EditProfile"; // Import EditProfile
 import ProtectedRoute from "./components/ProtectedRoute";
 
 const App = () => {
+  useEffect(() => {
+    const clientKey = "SB-Mid-client-BtWr-N86OkdW2Qfn"
+
+    const script = document.createElement("script");
+    script.src = "https://app.sandbox.midtrans.com/snap/snap.js";
+    script.setAttribute('data-client-key', clientKey);
+    script.async = true;
+
+    document.body.appendChild(script);
+
+    return () => {
+      document.body.removeChild(script)
+    }
+  })
+
   return (
     <Router>
       <Routes>
