@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"; // Tambahkan useContext di sini
+import React, { useState, useContext, useEffect } from "react";
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Link } from "react-scroll";
 import { useNavigate } from "react-router-dom";
@@ -116,13 +116,11 @@ const Navbar = () => {
                 Kontak
               </Link>
             </li>
-            <li>
-              {token ? (
+            {token && (
+              <li>
                 <Avatar />
-              ) : (
-                <Button onClick={handleLoginClick} text="Login" />
-              )}
-            </li>
+              </li>
+            )}
           </ul>
         </div>
         <div className="hidden md:flex items-center space-x-4">
@@ -164,11 +162,8 @@ const Navbar = () => {
           >
             Kontak
           </Link>
-          {token ? (
-            <Avatar />
-          ) : (
-            <Button onClick={handleLoginClick} text="Login" />
-          )}
+          {token && <Avatar />}
+          {!token && <Button onClick={handleLoginClick} text="Login" />}
         </div>
       </div>
     </nav>

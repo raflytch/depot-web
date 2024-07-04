@@ -1,11 +1,12 @@
 import React, { useContext } from "react";
-import { AuthContext } from "../contexts/AuthContext";
+import { AuthContext, AuthDispatchContext } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 import Swal from "sweetalert2";
 
 const AvatarManageAccount = () => {
   const { token } = useContext(AuthContext);
+  const dispatch = useContext(AuthDispatchContext);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -21,6 +22,7 @@ const AvatarManageAccount = () => {
       }
 
       Cookies.remove("access_token");
+      dispatch({ type: "logged-out" });
       navigate("/");
 
       // SweetAlert untuk logout berhasil

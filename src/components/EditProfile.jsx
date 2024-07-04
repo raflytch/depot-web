@@ -94,7 +94,7 @@ const EditProfile = function () {
       <h1 className="text-4xl text-primary font-bold">Profil Anda</h1>
       <Avatar className="scale-150 origin-top-left mb-14" />
       <div className="flex flex-row justify-between items-start gap-8">
-        <div className="flex flex-col gap-5 w-full md:w-5/6">
+        <div className="flex flex-col gap-5 w-full">
           <div className="h-16">
             <h2 className="text-lg text-primary font-bold">Nama</h2>
             {editable ? (
@@ -125,7 +125,7 @@ const EditProfile = function () {
             )}
           </div>
         </div>
-        <div className="flex items-center justify-end w-full md:w-auto">
+        <div className="flex items-center justify-end w-fit">
           <button
             onClick={toggleEdit}
             className="text-primary hover:text-blue-600"

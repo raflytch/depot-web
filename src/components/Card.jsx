@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from "react";
+import Swal from "sweetalert2";
 import Button from "./Button";
 import Cart from "./Cart";
-import Modal from "./Modal";
 import { FaStar } from "react-icons/fa";
 
 const Card = ({ price, img, product, desc, fetchStock }) => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [cart, setCart] = useState([]);
-  const [isModalOpen, setModalOpen] = useState(false);
   const [stock, setStock] = useState(null);
 
   useEffect(() => {
@@ -17,7 +16,7 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
       setStock(stockData);
     };
     getStock();
-  }, []);
+  }, [fetchStock, product]);
 
   const handleAddToCart = () => {
     const formattedPrice = parseFloat(
@@ -44,8 +43,26 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
     setCart(newCart);
   };
 
-  const handleOpenModal = () => {
-    setModalOpen(true);
+  const handlePurchase = () => {
+    const item = cart.find((item) => item.product === product);
+    if (!item || item.count === 0) {
+      Swal.fire({
+        icon: "error",
+        title: "Produk tidak boleh kosong",
+        text: "Harap tambahkan produk sebelum membeli.",
+      });
+    } else {
+      // Replace this with your Midtrans integration
+      if (window.snap) {
+        snap.pay("97508451-42e5-483d-9052-ed3d68b034c8");
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Midtrans not loaded",
+          text: "Please check if the Midtrans script is correctly loaded.",
+        });
+      }
+    }
   };
 
   const total = cart.reduce((acc, item) => acc + item.count * item.price, 0);
@@ -61,6 +78,8 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
       .replace("IDR", "Rp")
       .trim();
   };
+
+  const item = cart.find((item) => item.product === product);
 
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -99,32 +118,33 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
               parseFloat(price.replace(/[^\d,]/g, "").replace(",", "."))
             )}
           </span>
-          <Cart
-            count={cart.find((item) => item.product === product)?.count || 0}
-            onIncrement={handleAddToCart}
-            onDecrement={() =>
-              handleRemoveFromCart(
-                cart.findIndex((item) => item.product === product)
-              )
-            }
-          />
+          <div className="flex items-center">
+            <Cart
+              count={item?.count || 0}
+              onIncrement={handleAddToCart}
+              onDecrement={() =>
+                handleRemoveFromCart(
+                  cart.findIndex((item) => item.product === product)
+                )
+              }
+            />
+          </div>
         </div>
         <div className="flex items-center justify-between mt-2">
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Stok: {stock !== null ? stock : "Memuat..."}
           </span>
+          {item && (
+            <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+              Subtotal: {formatPrice(item.count * item.price)}
+            </span>
+          )}
         </div>
+        <div id="snap-kontol"></div>
         <div className="flex items-center justify-center mt-4">
-          <Button text={"Tambah Ke Keranjang"} onClick={handleOpenModal} />
+          <Button text={"Beli Sekarang"} onClick={handlePurchase} />
         </div>
       </div>
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        cartItems={cart}
-        total={formatPrice(total)}
-        onRemoveItem={handleRemoveFromCart}
-      />
     </div>
   );
 };
