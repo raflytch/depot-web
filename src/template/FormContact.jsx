@@ -83,9 +83,9 @@ const FormContact = () => {
   };
 
   return (
-    <div className="hero min-h-screen bg-white py-10 lg:py-20">
-      <div className="hero-content text-center flex flex-col">
-        <div className="max-w-md lg:max-w-3xl">
+    <div className="min-h-screen bg-white py-10 lg:py-20 flex items-center justify-center">
+      <div className="w-full max-w-4xl flex flex-col items-center">
+        <div className="text-center mb-10">
           <h1 className="text-5xl font-bold text-primary">Kontak</h1>
           <p className="py-6">
             Kami siap melayani kebutuhan air minum Anda! Jangan ragu untuk
@@ -94,9 +94,9 @@ const FormContact = () => {
             yang ramah dan profesional selalu siap membantu Anda.
           </p>
         </div>
-        <div className="card w-full lg:w-4/6 shadow-2xl bg-base-100 flex-1">
-          <form className="card-body" onSubmit={handleSubmit}>
-            <div className="form-control">
+        <div className="rounded-xl w-full lg:w-4/6 shadow-2xl bg-base-100 p-8">
+          <form onSubmit={handleSubmit}>
+            <div className="form-control mb-4">
               <Label title="Nama" />
               <Input
                 type="text"
@@ -107,7 +107,7 @@ const FormContact = () => {
                 required
               />
             </div>
-            <div className="form-control">
+            <div className="form-control mb-4">
               <Label title="Email" />
               <Input
                 type="email"
@@ -118,7 +118,8 @@ const FormContact = () => {
                 required
               />
             </div>
-            <div>
+            <div className="form-control mb-4">
+              <Label title="Pesan" />
               <TextArea
                 name="message"
                 value={formData.message}
