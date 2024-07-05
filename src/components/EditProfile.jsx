@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import Avatar from "./Avatar.jsx";
-import { AuthContext } from "../contexts/AuthContext.jsx";
+import {AuthContext, AuthDispatchContext} from "../contexts/AuthContext.jsx";
 import { BsPencilSquare } from "react-icons/bs";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -10,8 +10,9 @@ import "aos/dist/aos.css";
 
 const EditProfile = function () {
   const navigate = useNavigate();
-  const { token, nama, email, alamat, dispatch } = useContext(AuthContext);
-  const [inputName, setInputName] = useState(nama);
+  const { id, token, name, email, alamat } = useContext(AuthContext);
+  const dispatch = useContext(AuthDispatchContext);
+  const [inputName, setInputName] = useState(name);
   const [inputAlamat, setInputAlamat] = useState(alamat);
   const [editable, setEditable] = useState(false);
 
@@ -25,20 +26,20 @@ const EditProfile = function () {
   // Function to toggle editing mode
   const toggleEdit = () => {
     setEditable(!editable);
-    setInputName(nama); // Reset inputName to current name
+    setInputName(name); // Reset inputName to current name
     setInputAlamat(alamat); // Reset inputAlamat to current alamat
   };
 
   // Function to handle save changes
   const handleSaveChanges = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/profile/update", {
-        method: "PUT",
+      const response = await fetch(import.meta.env.VITE_BACKEND_URI + `users/${id}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ nama: inputName, alamat: inputAlamat }),
+        body: JSON.stringify({ name: inputName, alamat: inputAlamat }),
       });
 
       if (!response.ok) {
@@ -48,7 +49,7 @@ const EditProfile = function () {
       // Update context or state if necessary
       dispatch({
         type: "update-profile",
-        nama: inputName,
+        name: inputName,
         alamat: inputAlamat,
       });
 
@@ -105,7 +106,7 @@ const EditProfile = function () {
                 className="input bg-white border-2 border-primary rounded px-3 py-2 focus:outline-none focus:border-blue-600 w-full"
               />
             ) : (
-              <h3 className="text-xl text-primary-content">{nama}</h3>
+              <h3 className="text-xl text-primary-content">{name}</h3>
             )}
           </div>
           <div className="h-16">

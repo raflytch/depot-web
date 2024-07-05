@@ -1,4 +1,4 @@
-import { createContext, useReducer } from "react";
+import {createContext, useEffect, useReducer} from "react";
 import Cookies from "js-cookie";
 import { jwtDecode } from "jwt-decode";
 
@@ -7,6 +7,24 @@ export const AuthDispatchContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(authReducer, initUser());
+
+  useEffect(() => {
+    (async () => {
+      const { id } = state;
+      if (id !== -1) {
+        const res = await fetch(import.meta.env.VITE_BACKEND_URI + `users/alamat/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${Cookies.get("access_token")}`,
+          },
+        })
+        const data = await res.json();
+
+        dispatch({ type: "set-alamat", alamat: data.alamat });
+      }
+    })()
+  }, [])
 
   return (
     <AuthContext.Provider value={state}>
@@ -23,7 +41,8 @@ function authReducer(state, action) {
       return action.user;
     case "logged-out":
       return {
-        nama: "",
+        id: -1,
+        name: "",
         email: "",
         role: "",
         token: "",
@@ -37,7 +56,7 @@ function authReducer(state, action) {
     case "update-profile":
       return {
         ...state,
-        nama: action.nama,
+        name: action.name,
         alamat: action.alamat,
       };
     default:
@@ -53,15 +72,17 @@ const initUser = () => {
       const decodedToken = jwtDecode(token);
 
       return {
-        nama: decodedToken.nama,
+        id: decodedToken.id,
+        name: decodedToken.name,
         email: decodedToken.email,
         role: decodedToken.role,
         token: token,
-        alamat: decodedToken.alamat, // Tambahkan state untuk alamat
+        alamat: "", // Tambahkan state untuk alamat
       };
     } catch (err) {
       return {
-        nama: "",
+        id: -1,
+        name: "",
         email: "",
         role: "",
         token: "",
@@ -70,7 +91,8 @@ const initUser = () => {
     }
   }
   return {
-    nama: "",
+    id: -1,
+    name: "",
     email: "",
     role: "",
     token: "",

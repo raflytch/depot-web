@@ -52,10 +52,12 @@ const AuthLayout = ({ mode }) => {
         dispatch({
           type: "logged-in",
           user: {
-            nama: decodedToken.nama,
+            id: decodedToken.id,
+            name: decodedToken.name,
             email: decodedToken.email,
             role: userRole,
             token: data.access_token,
+            alamat: data.alamat,
           },
         });
 
