@@ -94,7 +94,7 @@ const FormContact = () => {
             yang ramah dan profesional selalu siap membantu Anda.
           </p>
         </div>
-        <div className="w-full lg:w-4/6 shadow-2xl bg-base-100 p-8">
+        <div className="rounded-xl w-full lg:w-4/6 shadow-2xl bg-base-100 p-8">
           <form onSubmit={handleSubmit}>
             <div className="form-control mb-4">
               <Label title="Nama" />
