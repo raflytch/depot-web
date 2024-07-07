@@ -43,7 +43,7 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
     setCart(newCart);
   };
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     const item = cart.find((item) => item.product === product);
     if (!item || item.count === 0) {
       Swal.fire({
@@ -54,7 +54,7 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
     } else {
       // Replace this with your Midtrans integration
       if (window.snap) {
-        window.snap.pay("97508451-42e5-483d-9052-ed3d68b034c8");
+        window.snap.pay("e93f51e1-bac3-4094-8592-489e59371bad");
       } else {
         Swal.fire({
           icon: "error",
