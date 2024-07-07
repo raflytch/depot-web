@@ -109,7 +109,7 @@ const AuthLayout = ({ mode }) => {
 
     try {
       // Logika untuk proses registrasi
-      const response = await fetch("http://localhost:3000/auth/register", {
+      const response = await fetch(import.meta.env.VITE_BACKEND_URI + "auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

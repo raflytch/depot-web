@@ -11,7 +11,7 @@ const AvatarManageAccount = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch("http://localhost:3000/auth/logout", {
+      const res = await fetch(import.meta.env.VITE_BACKEND_URI + "auth/logout", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

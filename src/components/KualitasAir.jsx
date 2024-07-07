@@ -21,7 +21,7 @@ const KualitasAir = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         const accessToken = Cookies.get("access_token");
-        const url = "http://localhost:3000/auth/kualitas-air";
+        const url = import.meta.env.VITE_BACKEND_URI + "products/kualitas-air";
 
         const res = await fetch(url, {
           method: "POST",
