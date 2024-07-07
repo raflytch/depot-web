@@ -4,19 +4,8 @@ import Button from "./Button";
 import Cart from "./Cart";
 import { FaStar } from "react-icons/fa";
 
-const Card = ({ price, img, product, desc, fetchStock }) => {
-  const [rating, setRating] = useState(0);
-  const [hover, setHover] = useState(0);
+const Card = ({ price, img, product, desc, stock, rating }) => {
   const [cart, setCart] = useState([]);
-  const [stock, setStock] = useState(null);
-
-  useEffect(() => {
-    const getStock = async () => {
-      const stockData = await fetchStock(product);
-      setStock(stockData);
-    };
-    getStock();
-  }, [fetchStock, product]);
 
   const handleAddToCart = () => {
     const formattedPrice = parseFloat(
@@ -52,20 +41,18 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
         text: "Harap tambahkan produk sebelum membeli.",
       });
     } else {
-      // Replace this with your Midtrans integration
+      // Ganti ini dengan integrasi Midtrans Anda
       if (window.snap) {
         window.snap.pay("e93f51e1-bac3-4094-8592-489e59371bad");
       } else {
         Swal.fire({
           icon: "error",
-          title: "Midtrans not loaded",
-          text: "Please check if the Midtrans script is correctly loaded.",
+          title: "Midtrans tidak dimuat",
+          text: "Periksa apakah script Midtrans dimuat dengan benar.",
         });
       }
     }
   };
-
-  const total = cart.reduce((acc, item) => acc + item.count * item.price, 0);
 
   const formatPrice = (price) => {
     return new Intl.NumberFormat("id-ID", {
@@ -79,7 +66,9 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
       .trim();
   };
 
-  const item = cart.find((item) => item.product === product);
+  const handleRatingHover = (star) => {
+    // Implementasikan logika jika perlu
+  };
 
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
@@ -101,10 +90,10 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
               <FaStar
                 key={star}
                 size={20}
-                color={star <= (hover || rating) ? "#FFC94A" : "#EEEEEE"}
-                onMouseEnter={() => setHover(star)}
-                onMouseLeave={() => setHover(0)}
-                onClick={() => setRating(star)}
+                color={star <= rating ? "#FFC94A" : "#EEEEEE"}
+                onMouseEnter={() => handleRatingHover(star)}
+                onMouseLeave={() => handleRatingHover(0)}
+                onClick={() => handleRatingClick(star)}
               />
             ))}
           </div>
@@ -140,7 +129,6 @@ const Card = ({ price, img, product, desc, fetchStock }) => {
             </span>
           )}
         </div>
-        <div id="snap-kontol"></div>
         <div className="flex items-center justify-center mt-4">
           <Button text={"Beli Sekarang"} onClick={handlePurchase} />
         </div>

@@ -1,60 +1,49 @@
-import React from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import products from "../utils/product";
 import Card from "../components/Card";
 import logo from "../assets/img/logo.png";
-import Button from "../components/Button"; // Import Button component
+import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
-
-// Impor semua gambar produk
-import GalonAqua from "../assets/img/galonaqua.png";
-import GalonOasis from "../assets/img/galonoasis.jpg";
-import GalonPristine from "../assets/img/galonpristine.jpeg";
-import GalonAmidis from "../assets/img/galonamidis.jpeg";
-import GalonVit from "../assets/img/galonvit.jpeg";
-import GalonIsiUlang from "../assets/img/galonisiulang.jpg";
-import RefillBotol from "../assets/img/refillulang.jpg";
-
-// Objek yang mengaitkan produk dengan gambar yang sesuai
-const productImages = {
-  Aqua: GalonAqua,
-  Oasis: GalonOasis,
-  Pristine: GalonPristine,
-  Amidis: GalonAmidis,
-  Vit: GalonVit,
-  "Isi Ulang - RO": GalonIsiUlang,
-  "Isi Ulang - Biasa": GalonIsiUlang,
-  "Air Minum - 500ml": RefillBotol,
-  "Air Minum - 1L": RefillBotol,
-};
+import Swal from "sweetalert2";
+import { AuthContext } from "../contexts/AuthContext";
 
 const ProductPage = () => {
-  // Memisahkan produk berdasarkan kategori
-  const newGallons = products.filter(
-    (product) =>
-      product.product === "Aqua" ||
-      product.product === "Oasis" ||
-      product.product === "Pristine" ||
-      product.product === "Amidis" ||
-      product.product === "Vit"
-  );
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
+  const { token } = useContext(AuthContext); // Ambil token dari AuthContext
 
-  const refillGallons = products.filter(
-    (product) =>
-      product.product === "Isi Ulang - RO" ||
-      product.product === "Isi Ulang - Biasa"
-  );
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch(
+          import.meta.env.VITE_BACKEND_URI + "products",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Set Authorization header dengan token
+            },
+          }
+        );
+        console.log(response);
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setProducts(data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Gagal memuat produk. Silakan coba lagi nanti.",
+          confirmButtonText: "Tutup",
+        });
+      }
+    };
 
-  const refillWater = products.filter(
-    (product) =>
-      product.product === "Air Minum - 500ml" ||
-      product.product === "Air Minum - 1L"
-  );
+    fetchProducts();
+  }, [token]); // Jadikan token sebagai dependency useEffect untuk fetch ulang saat token berubah
 
-  const navigate = useNavigate(); // Initialize useNavigate
-
-  // Function untuk menavigasi kembali ke halaman Beranda
   const goToHome = () => {
     navigate("/");
   };
@@ -67,45 +56,56 @@ const ProductPage = () => {
           <h1 className="text-3xl font-bold">Galon Baru</h1>
         </div>
         <div className="flex flex-wrap justify-center gap-6">
-          {newGallons.map((product, index) => (
-            <Card
-              key={index}
-              product={product.product}
-              desc={product.desc}
-              price={product.price}
-              img={productImages[product.product]} // Memanggil objek productImages untuk mendapatkan gambar sesuai dengan nama produk
-            />
-          ))}
+          {products
+            .filter((product) => product.category === "GALON_BARU")
+            .map((product, index) => (
+              <Card
+                key={index}
+                product={product.name}
+                desc={product.description}
+                price={product.price}
+                img={product.imgUrl}
+                stock={product.stock}
+                rating={product.rating}
+              />
+            ))}
         </div>
         <div className="text-center mt-12 mb-8">
           <h1 className="text-3xl font-bold">Galon Isi Ulang</h1>
         </div>
         <div className="flex flex-wrap justify-center gap-6">
-          {refillGallons.map((product, index) => (
-            <Card
-              key={index}
-              product={product.product}
-              desc={product.desc}
-              price={product.price}
-              img={productImages[product.product]} // Memanggil objek productImages untuk mendapatkan gambar sesuai dengan nama produk
-            />
-          ))}
+          {products
+            .filter((product) => product.category === "GALON_ISI_ULANG")
+            .map((product, index) => (
+              <Card
+                key={index}
+                product={product.name}
+                desc={product.description}
+                price={product.price}
+                img={product.imgUrl}
+                stock={product.stock}
+                rating={product.rating}
+              />
+            ))}
         </div>
         <div className="text-center mt-12 mb-8">
           <h1 className="text-3xl font-bold">Refill Air Minum</h1>
         </div>
         <div className="flex flex-wrap justify-center gap-6">
-          {refillWater.map((product, index) => (
-            <Card
-              key={index}
-              product={product.product}
-              desc={product.desc}
-              price={product.price}
-              img={productImages[product.product]} // Memanggil objek productImages untuk mendapatkan gambar sesuai dengan nama produk
-            />
-          ))}
+          {products
+            .filter((product) => product.category === "REFILL_AIR_MINUM")
+            .map((product, index) => (
+              <Card
+                key={index}
+                product={product.name}
+                desc={product.description}
+                price={product.price}
+                img={product.imgUrl}
+                stock={product.stock}
+                rating={product.rating}
+              />
+            ))}
         </div>
-        {/* Tombol "Kembali ke Beranda" menggunakan komponen Button */}
         <div className="flex justify-center mt-8">
           <Button onClick={goToHome} text="Kembali ke Beranda" />
         </div>
