@@ -11,11 +11,14 @@ const AvatarManageAccount = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await fetch(import.meta.env.VITE_BACKEND_URI + "auth/logout", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await fetch(
+        import.meta.env.VITE_BACKEND_URI + "auth/logout",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (res.status !== 200) {
         throw new Error("Logout gagal");
