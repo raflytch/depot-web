@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import Avatar from "./Avatar.jsx";
-import {AuthContext, AuthDispatchContext} from "../contexts/AuthContext.jsx";
+import { AuthContext, AuthDispatchContext } from "../contexts/AuthContext.jsx";
 import { BsPencilSquare } from "react-icons/bs";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -32,15 +32,34 @@ const EditProfile = function () {
 
   // Function to handle save changes
   const handleSaveChanges = async () => {
-    try {
-      const response = await fetch(import.meta.env.VITE_BACKEND_URI + `users/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ name: inputName, alamat: inputAlamat }),
+    // Validate address
+    const allowedAreas = ["Sunter", "Pademangan"];
+    const isValidAddress = allowedAreas.some((area) =>
+      inputAlamat.includes(area)
+    );
+
+    if (!isValidAddress) {
+      Swal.fire({
+        icon: "error",
+        title: "Alamat Tidak Valid",
+        text: "Alamat hanya boleh di daerah Sunter dan Pademangan.",
+        confirmButtonText: "Oke",
       });
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        import.meta.env.VITE_BACKEND_URI + `users/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ name: inputName, alamat: inputAlamat }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Failed to update profile");
