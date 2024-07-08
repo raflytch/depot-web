@@ -1,9 +1,9 @@
-import React, {useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import Button from "./Button";
 import Cart from "./Cart";
 import { FaStar } from "react-icons/fa";
-import {AuthContext} from "../contexts/AuthContext.jsx";
+import { AuthContext } from "../contexts/AuthContext.jsx";
 
 const Card = ({ id, price, img, product, desc, stock, rating }) => {
   const [cart, setCart] = useState([]);
@@ -16,11 +16,27 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
     const itemIndex = cart.findIndex((item) => item.product === product);
     if (itemIndex > -1) {
       const newCart = [...cart];
-      newCart[itemIndex].count += 1;
-      setCart(newCart);
+      if (newCart[itemIndex].count + 1 > stock) {
+        Swal.fire({
+          icon: "error",
+          title: "Jumlah Melebihi Stok",
+          text: "Jumlah item yang ingin ditambahkan melebihi stok yang tersedia.",
+        });
+      } else {
+        newCart[itemIndex].count += 1;
+        setCart(newCart);
+      }
     } else {
-      const newItem = { product, price: formattedPrice, count: 1, id: id };
-      setCart([...cart, newItem]);
+      if (1 > stock) {
+        Swal.fire({
+          icon: "error",
+          title: "Jumlah Melebihi Stok",
+          text: "Jumlah item yang ingin ditambahkan melebihi stok yang tersedia.",
+        });
+      } else {
+        const newItem = { product, price: formattedPrice, count: 1, id: id };
+        setCart([...cart, newItem]);
+      }
     }
   };
 
@@ -44,19 +60,21 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
       });
     } else {
       // Ganti ini dengan integrasi Midtrans Anda
-      const res = await fetch(import.meta.env.VITE_BACKEND_URI + "payments/create-payment", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-        method: "POST",
-        body: JSON.stringify({
-          quantity: (item.count),
-          productId: item.id,
-        }),
-      })
+      const res = await fetch(
+        import.meta.env.VITE_BACKEND_URI + "payments/create-payment",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            quantity: item.count,
+            productId: item.id,
+          }),
+        }
+      );
       const data = await res.json();
-      console.log(item.count)
       if (window.snap && res.ok) {
         window.snap.pay(data.token);
       } else {
@@ -85,7 +103,7 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
     // Implementation logika jika perlu
   };
 
-  const item = cart[0];
+  const item = cart.find((item) => item.product === product);
 
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
