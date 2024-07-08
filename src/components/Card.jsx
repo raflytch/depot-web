@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, {useContext, useState} from "react";
 import Swal from "sweetalert2";
 import Button from "./Button";
 import Cart from "./Cart";
 import { FaStar } from "react-icons/fa";
+import {AuthContext} from "../contexts/AuthContext.jsx";
 
-const Card = ({ price, img, product, desc, stock, rating }) => {
+const Card = ({ id, price, img, product, desc, stock, rating }) => {
   const [cart, setCart] = useState([]);
+  const { token } = useContext(AuthContext);
 
   const handleAddToCart = () => {
     const formattedPrice = parseFloat(
@@ -17,7 +19,7 @@ const Card = ({ price, img, product, desc, stock, rating }) => {
       newCart[itemIndex].count += 1;
       setCart(newCart);
     } else {
-      const newItem = { product, price: formattedPrice, count: 1 };
+      const newItem = { product, price: formattedPrice, count: 1, id: id };
       setCart([...cart, newItem]);
     }
   };
@@ -42,8 +44,21 @@ const Card = ({ price, img, product, desc, stock, rating }) => {
       });
     } else {
       // Ganti ini dengan integrasi Midtrans Anda
-      if (window.snap) {
-        window.snap.pay("e93f51e1-bac3-4094-8592-489e59371bad");
+      const res = await fetch(import.meta.env.VITE_BACKEND_URI + "payments/create-payment", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        method: "POST",
+        body: JSON.stringify({
+          quantity: (item.count),
+          productId: item.id,
+        }),
+      })
+      const data = await res.json();
+      console.log(item.count)
+      if (window.snap && res.ok) {
+        window.snap.pay(data.token);
       } else {
         Swal.fire({
           icon: "error",
@@ -67,10 +82,10 @@ const Card = ({ price, img, product, desc, stock, rating }) => {
   };
 
   const handleRatingHover = (star) => {
-    // Implementasikan logika jika perlu
+    // Implementation logika jika perlu
   };
 
-  const item = cart.find((item) => item.product === product);
+  const item = cart[0];
 
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">

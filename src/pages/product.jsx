@@ -60,6 +60,7 @@ const ProductPage = () => {
             .map((product, index) => (
               <Card
                 key={index}
+                id={product.id}
                 product={product.name}
                 desc={product.description}
                 price={product.price}
@@ -78,6 +79,7 @@ const ProductPage = () => {
             .map((product, index) => (
               <Card
                 key={index}
+                id={product.id}
                 product={product.name}
                 desc={product.description}
                 price={product.price}
@@ -96,6 +98,7 @@ const ProductPage = () => {
             .map((product, index) => (
               <Card
                 key={index}
+                id={product.id}
                 product={product.name}
                 desc={product.description}
                 price={product.price}
