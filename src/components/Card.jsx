@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Swal from "sweetalert2";
 import Button from "./Button";
 import Cart from "./Cart";
@@ -70,6 +70,8 @@ const Card = ({ price, img, product, desc, stock, rating }) => {
     // Implementasikan logika jika perlu
   };
 
+  const item = cart.find((item) => item.product === product);
+
   return (
     <div className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <a href="#">
@@ -93,7 +95,7 @@ const Card = ({ price, img, product, desc, stock, rating }) => {
                 color={star <= rating ? "#FFC94A" : "#EEEEEE"}
                 onMouseEnter={() => handleRatingHover(star)}
                 onMouseLeave={() => handleRatingHover(0)}
-                onClick={() => handleRatingClick(star)}
+                onClick={() => handleRatingHover(star)}
               />
             ))}
           </div>
