@@ -25,6 +25,7 @@ const Barang = () => {
       const data = await response.json();
       // Menyusun data produk sesuai format yang dibutuhkan
       const formattedData = data.map((product) => ({
+        ...product,
         nama: product.name,
         jumlah: product.stock,
         kualitasAir: kualitasAirMapper(product.kualitasAir),
@@ -115,7 +116,7 @@ const Barang = () => {
           updatedStokBarang[index] = {
             ...updatedStokBarang[index],
             jumlah: data.stock,
-            kualitasAir: data.kualitasAir,
+            kualitasAir: kualitasAirMapper(data.kualitasAir),
           };
           return updatedStokBarang;
         });

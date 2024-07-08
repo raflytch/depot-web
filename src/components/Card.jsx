@@ -76,7 +76,9 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
       );
       const data = await res.json();
       if (window.snap && res.ok) {
-        window.snap.pay(data.token);
+        window.snap.pay(data.token, {
+
+        });
       } else {
         Swal.fire({
           icon: "error",
