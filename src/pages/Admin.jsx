@@ -30,7 +30,6 @@ const Admin = () => {
 
             {/* Other Routes */}
             <Route path="barang" element={<Barang />} />
-            <Route path="kualitas-air" element={<KualitasAir />} />
             <Route path="transaksi" element={<Transaksi />} />
             <Route path="keluar" element={<Keluar />} />
             <Route path="*" element={<NotFound />} />

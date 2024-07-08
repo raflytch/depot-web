@@ -1,5 +1,3 @@
-// Sidebar.jsx
-
 import React from "react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import { MdDashboard, MdViewList, MdOutlinePayment } from "react-icons/md";
@@ -94,16 +92,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
               >
                 <MdViewList size={24} />
                 <span className="ml-3">Barang</span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/admin/kualitas-air"
-                className="flex items-center p-2 px-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                onClick={toggleSidebar} // Memanggil toggleSidebar untuk menutup sidebar
-              >
-                <FaHandHoldingWater size={24} />
-                <span className="ml-3">Kualitas Air</span>
               </Link>
             </li>
             <li>
