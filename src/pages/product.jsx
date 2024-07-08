@@ -11,7 +11,7 @@ import { AuthContext } from "../contexts/AuthContext";
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
   const navigate = useNavigate();
-  const { token } = useContext(AuthContext); // Ambil token dari AuthContext
+  const { token } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -20,7 +20,7 @@ const ProductPage = () => {
           import.meta.env.VITE_BACKEND_URI + "products",
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Set Authorization header dengan token
+              Authorization: `Bearer ${token}`,
             },
           }
         );
@@ -41,7 +41,7 @@ const ProductPage = () => {
     };
 
     fetchProducts();
-  }, [token]); // Jadikan token sebagai dependency useEffect untuk fetch ulang saat token berubah
+  }, [token]);
 
   const goToHome = () => {
     navigate("/");
