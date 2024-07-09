@@ -5,16 +5,26 @@ import Cart from "./Cart";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import RatingPopup from "./RatingPopUp";
-import {useLocation} from "react-router-dom"; // Import RatingPopup component
+import { useLocation } from "react-router-dom";
 
-const Card = ({ id, price, img, product, desc, stock, totalRating, totalPurchases, category }) => {
+const Card = ({
+  id,
+  price,
+  img,
+  product,
+  desc,
+  stock,
+  totalRating,
+  totalPurchases,
+  category,
+}) => {
   const [cart, setCart] = useState([]);
   const { token } = useContext(AuthContext);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const orderId = queryParams.get('order_id');
-  const statusCode = queryParams.get('status_code');
-  const transactionStatus = queryParams.get('transaction_status');
+  const orderId = queryParams.get("order_id");
+  const statusCode = queryParams.get("status_code");
+  const transactionStatus = queryParams.get("transaction_status");
 
   const handleAddToCart = () => {
     const formattedPrice = parseFloat(
@@ -165,12 +175,17 @@ const Card = ({ id, price, img, product, desc, stock, totalRating, totalPurchase
               <FaStar
                 key={star}
                 size={20}
-                color={star <= (totalRating / totalPurchases) ? "#FFC94A" : "#EEEEEE"}
+                color={
+                  star <= totalRating / totalPurchases ? "#FFC94A" : "#EEEEEE"
+                }
               />
             ))}
           </div>
           <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">
-            {totalPurchases === 0 ? 0 : totalRating / totalPurchases}
+            {totalPurchases === 0
+              ? 0
+              : (totalRating / totalPurchases).toFixed(1)}{" "}
+            {/* Membatasi ke satu desimal */}
           </span>
         </div>
         <div className="flex items-center justify-between">
@@ -205,9 +220,11 @@ const Card = ({ id, price, img, product, desc, stock, totalRating, totalPurchase
           <Button text={"Beli Sekarang"} onClick={handlePurchase} />
         </div>
       </div>
-      {(orderId && transactionStatus === "settlement" && statusCode === "200") ?
-        <RatingPopup paymentId={orderId} /> : <></>// Render RatingPopup jika showRatingPopup true
-      }
+      {orderId && transactionStatus === "settlement" && statusCode === "200" ? (
+        <RatingPopup paymentId={orderId} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
