@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import React, { useState, useContext } from "react";
 import Swal from "sweetalert2";
 import Button from "./Button";
 import Cart from "./Cart";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import RatingPopup from "./RatingPopUp"; // Import RatingPopup component
 
-const Card = ({ id, price, img, product, desc, stock, rating }) => {
+const Card = ({ id, price, img, product, desc, stock, rating, category }) => {
   const [cart, setCart] = useState([]);
+  const [showRatingPopup, setShowRatingPopup] = useState(false); // State to toggle RatingPopup
   const { token } = useContext(AuthContext);
 
   const handleAddToCart = () => {
@@ -58,34 +60,69 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
         title: "Produk tidak boleh kosong",
         text: "Harap tambahkan produk sebelum membeli.",
       });
-    } else {
-      // Ganti ini dengan integrasi Midtrans Anda
-      const res = await fetch(
-        import.meta.env.VITE_BACKEND_URI + "payments/create-payment",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify({
-            quantity: item.count,
-            productId: item.id,
-          }),
-        }
-      );
-      const data = await res.json();
-      if (window.snap && res.ok) {
-        window.snap.pay(data.token, {
+      return;
+    }
 
-        });
-      } else {
+    if (category === "REFILL_AIR_MINUM") {
+      const result = await Swal.fire({
+        title: "Apakah anda sekarang berada pada Depot Air Minum Anugrah?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Iya",
+        cancelButtonText: "Tidak",
+      });
+
+      if (!result.isConfirmed) {
         Swal.fire({
           icon: "error",
-          title: "Midtrans tidak dimuat",
-          text: "Periksa apakah script Midtrans dimuat dengan benar.",
+          title: "Pembelian Ditolak",
+          text: "Anda tidak berada di tempat depot air anugrah.",
         });
+        return;
       }
+    }
+
+    const res = await fetch(
+      import.meta.env.VITE_BACKEND_URI + "payments/create-payment",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: JSON.stringify({
+          quantity: item.count,
+          productId: item.id,
+        }),
+      }
+    );
+    const data = await res.json();
+    if (window.snap && res.ok) {
+      window.snap.pay(data.token, {
+        onSuccess: function (result) {
+          // Tampilkan RatingPopup setelah pembelian sukses
+          setShowRatingPopup(true);
+        },
+        onPending: function (result) {
+          console.log("Pending:", result);
+        },
+        onError: function (result) {
+          Swal.fire({
+            icon: "error",
+            title: "Transaksi Gagal",
+            text: "Terjadi kesalahan saat memproses transaksi.",
+          });
+        },
+        onClose: function () {
+          console.log("Payment popup closed");
+        },
+      });
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Midtrans tidak dimuat",
+        text: "Periksa apakah script Midtrans dimuat dengan benar.",
+      });
     }
   };
 
@@ -102,7 +139,7 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
   };
 
   const handleRatingHover = (star) => {
-    // Implementation logika jika perlu
+    // Implementasi logika jika diperlukan
   };
 
   const item = cart.find((item) => item.product === product);
@@ -146,7 +183,7 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
           </span>
           <div className="flex items-center">
             <Cart
-              count={item?.count || 0}
+              count={item?.count || 0} // Access item?.count safely
               onIncrement={handleAddToCart}
               onDecrement={() =>
                 handleRemoveFromCart(
@@ -160,7 +197,7 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
           <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
             Stok: {stock !== null ? stock : "Memuat..."}
           </span>
-          {item && (
+          {item && ( // Check if item exists before rendering subtotal
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
               Subtotal: {formatPrice(item.count * item.price)}
             </span>
@@ -170,6 +207,9 @@ const Card = ({ id, price, img, product, desc, stock, rating }) => {
           <Button text={"Beli Sekarang"} onClick={handlePurchase} />
         </div>
       </div>
+      {showRatingPopup && (
+        <RatingPopup productId={id} /> // Render RatingPopup jika showRatingPopup true
+      )}
     </div>
   );
 };

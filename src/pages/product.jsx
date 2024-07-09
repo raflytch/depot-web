@@ -105,6 +105,7 @@ const ProductPage = () => {
                 img={product.imgUrl}
                 stock={product.stock}
                 rating={product.rating}
+                category={product.category} // Pass the category to Card component
               />
             ))}
         </div>
