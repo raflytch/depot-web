@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect, useContext} from "react";
 import Swal from "sweetalert2";
 import { FaStar } from "react-icons/fa";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import {AuthContext} from "../contexts/AuthContext.jsx";
 
-const RatingPopup = ({ productId }) => {
+const RatingPopup = ({ paymentId }) => {
   const [rating, setRating] = useState(0);
+  const [productId, setProductId] = useState();
+  const { token } = useContext(AuthContext);
+  console.log('KONTOLOGY')
 
   useEffect(() => {
     AOS.init({ duration: 1000 }); // Initialize AOS with desired options
@@ -13,12 +17,17 @@ const RatingPopup = ({ productId }) => {
     const fetchProductDetails = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URI}products/${productId}`
+          `${import.meta.env.VITE_BACKEND_URI}payments/${paymentId}/product`,
+            {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${token}`,
+            }
         );
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
         const productData = await response.json();
+        setProductId(productData.id)
         setRating(productData.rating); // Set initial rating from fetched data
       } catch (error) {
         console.error("Error fetching product details:", error);
@@ -32,7 +41,7 @@ const RatingPopup = ({ productId }) => {
     };
 
     fetchProductDetails();
-  }, [productId]);
+  }, [paymentId]);
 
   const handleRatingClick = (selectedRating) => {
     // Handle logic for sending rating to backend
@@ -44,11 +53,12 @@ const RatingPopup = ({ productId }) => {
 
     // Example: You can send the rating to the backend here
     // Uncomment below lines when you integrate with actual backend
-    /*
-    fetch(`${import.meta.env.VITE_BACKEND_URI}products/${productId}/rating`, {
-      method: "POST",
+    // /*
+    fetch(`${import.meta.env.VITE_BACKEND_URI}products/${productId}/rate`, {
+      method: "PATCH",
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify({ rating: selectedRating }),
     })
@@ -72,7 +82,7 @@ const RatingPopup = ({ productId }) => {
           confirmButtonText: "Tutup",
         });
       });
-    */
+    // */
   };
 
   return (
@@ -80,7 +90,7 @@ const RatingPopup = ({ productId }) => {
       id="popup-modal"
       tabIndex="-1"
       className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-      data-aos="fade-down" // Add AOS fade-down animation
+      data-aos="zoom-in"
     >
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -127,7 +137,6 @@ const RatingPopup = ({ productId }) => {
             </h3>
             <div className="flex justify-center space-x-2" data-aos="fade-up">
               {" "}
-              // Add AOS fade-up animation
               {[1, 2, 3, 4, 5].map((star) => (
                 <FaStar
                   key={star}

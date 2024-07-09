@@ -4,12 +4,17 @@ import Button from "./Button";
 import Cart from "./Cart";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext.jsx";
-import RatingPopup from "./RatingPopUp"; // Import RatingPopup component
+import RatingPopup from "./RatingPopUp";
+import {useLocation} from "react-router-dom"; // Import RatingPopup component
 
 const Card = ({ id, price, img, product, desc, stock, rating, category }) => {
   const [cart, setCart] = useState([]);
-  const [showRatingPopup, setShowRatingPopup] = useState(false); // State to toggle RatingPopup
   const { token } = useContext(AuthContext);
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const orderId = queryParams.get('order_id');
+  const statusCode = queryParams.get('status_code');
+  const transactionStatus = queryParams.get('transaction_status');
 
   const handleAddToCart = () => {
     const formattedPrice = parseFloat(
@@ -138,10 +143,6 @@ const Card = ({ id, price, img, product, desc, stock, rating, category }) => {
       .trim();
   };
 
-  const handleRatingHover = (star) => {
-    // Implementasi logika jika diperlukan
-  };
-
   const item = cart.find((item) => item.product === product);
 
   return (
@@ -207,9 +208,9 @@ const Card = ({ id, price, img, product, desc, stock, rating, category }) => {
           <Button text={"Beli Sekarang"} onClick={handlePurchase} />
         </div>
       </div>
-      {showRatingPopup && (
-        <RatingPopup productId={id} /> // Render RatingPopup jika showRatingPopup true
-      )}
+      {(orderId && transactionStatus === "settlement" && statusCode === "200") ?
+        <RatingPopup paymentId={orderId} /> : <></>// Render RatingPopup jika showRatingPopup true
+      }
     </div>
   );
 };
