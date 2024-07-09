@@ -9,7 +9,6 @@ const RatingPopup = ({ paymentId }) => {
   const [rating, setRating] = useState(0);
   const [productId, setProductId] = useState();
   const { token } = useContext(AuthContext);
-  console.log('KONTOLOGY')
 
   useEffect(() => {
     AOS.init({ duration: 1000 }); // Initialize AOS with desired options
@@ -89,7 +88,7 @@ const RatingPopup = ({ paymentId }) => {
     <div
       id="popup-modal"
       tabIndex="-1"
-      className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
+      className="overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
       data-aos="zoom-in"
     >
       <div className="relative p-4 w-full max-w-md max-h-full">

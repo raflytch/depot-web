@@ -7,7 +7,7 @@ import { AuthContext } from "../contexts/AuthContext.jsx";
 import RatingPopup from "./RatingPopUp";
 import {useLocation} from "react-router-dom"; // Import RatingPopup component
 
-const Card = ({ id, price, img, product, desc, stock, rating, category }) => {
+const Card = ({ id, price, img, product, desc, stock, totalRating, totalPurchases, category }) => {
   const [cart, setCart] = useState([]);
   const { token } = useContext(AuthContext);
   const location = useLocation();
@@ -165,15 +165,12 @@ const Card = ({ id, price, img, product, desc, stock, rating, category }) => {
               <FaStar
                 key={star}
                 size={20}
-                color={star <= rating ? "#FFC94A" : "#EEEEEE"}
-                onMouseEnter={() => handleRatingHover(star)}
-                onMouseLeave={() => handleRatingHover(0)}
-                onClick={() => handleRatingHover(star)}
+                color={star <= (totalRating / totalPurchases) ? "#FFC94A" : "#EEEEEE"}
               />
             ))}
           </div>
           <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800 ms-3">
-            {rating}.0
+            {totalPurchases === 0 ? 0 : totalRating / totalPurchases}
           </span>
         </div>
         <div className="flex items-center justify-between">

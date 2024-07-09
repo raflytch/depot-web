@@ -28,6 +28,7 @@ const ProductPage = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
+        console.log(data)
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -66,7 +67,8 @@ const ProductPage = () => {
                 price={product.price}
                 img={product.imgUrl}
                 stock={product.stock}
-                rating={product.rating}
+                totalRating={product.totalRating}
+                totalPurchases={product.totalPurchases}
               />
             ))}
         </div>
@@ -85,7 +87,8 @@ const ProductPage = () => {
                 price={product.price}
                 img={product.imgUrl}
                 stock={product.stock}
-                rating={product.rating}
+                totalRating={product.totalRating}
+                totalPurchases={product.totalPurchases}
               />
             ))}
         </div>
@@ -104,7 +107,8 @@ const ProductPage = () => {
                 price={product.price}
                 img={product.imgUrl}
                 stock={product.stock}
-                rating={product.rating}
+                totalRating={product.totalRating}
+                totalPurchases={product.totalPurchases}
                 category={product.category} // Pass the category to Card component
               />
             ))}
