@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import CardDashboard from "./CardDashboard";
+import CardProduct from "./CardProduct";
 
 const Dashboard = () => {
   // Data contoh untuk barang yang sudah dipublish dan kualitas air
@@ -24,6 +25,7 @@ const Dashboard = () => {
 
       {/* Bagian untuk Informasi Barang yang Sudah Dipublish */}
       <CardDashboard />
+      <CardProduct />
     </div>
   );
 };
