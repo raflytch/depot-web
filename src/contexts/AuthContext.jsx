@@ -21,6 +21,11 @@ export function AuthProvider({ children }) {
         })
         const data = await res.json();
 
+        if (!res.ok) {
+          dispatch({ type: "logged-out" });
+          return;
+        }
+
         dispatch({ type: "set-alamat", alamat: data.alamat });
       }
     })()
