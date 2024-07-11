@@ -121,15 +121,27 @@ const Card = ({
         onPending: function (result) {
           console.log("Pending:", result);
         },
-        onError: function (result) {
+        onError: () => {
+          fetch(import.meta.env.VITE_BACKEND_URI + `payments/${data.payment.id}/cancel`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            method: "POST",
+          });
           Swal.fire({
             icon: "error",
             title: "Transaksi Gagal",
             text: "Terjadi kesalahan saat memproses transaksi.",
           });
         },
-        onClose: function () {
-          console.log("Payment popup closed");
+        onClose: () => {
+          fetch(import.meta.env.VITE_BACKEND_URI + `payments/${data.payment.id}/cancel`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            },
+            method: "POST",
+          })
         },
       });
     } else {
