@@ -141,7 +141,7 @@ const EditProfile = function () {
                 className="input bg-white border-2 border-primary rounded px-3 py-2 h-32 resize-none focus:outline-none focus:border-blue-600 w-5/6 lg:w-full"
               />
             ) : (
-              <h3 className="text-xl text-primary-content">{alamat}</h3>
+              <h3 className="text-lg text-primary-content">{alamat}</h3>
             )}
           </div>
         </div>
