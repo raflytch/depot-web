@@ -125,12 +125,12 @@ const EditProfile = function () {
                 className="input bg-white border-2 border-primary rounded px-3 py-2 focus:outline-none focus:border-blue-600 w-5/6 lg:w-full text-lg"
               />
             ) : (
-              <h3 className="text-lg text-primary-content">{name}</h3>
+              <h3 className="text-lg text-black">{name}</h3>
             )}
           </div>
           <div className="h-16">
             <h2 className="text-lg text-primary font-bold">Email</h2>
-            <h3 className="text-[14px] text-primary-content">{email}</h3>
+            <h3 className="text-[16px] text-black">{email}</h3>
           </div>
           <div className="h-auto">
             <h2 className="text-lg text-primary font-bold">Alamat</h2>
@@ -141,7 +141,7 @@ const EditProfile = function () {
                 className="input bg-white border-2 border-primary rounded px-3 py-2 h-32 resize-none focus:outline-none focus:border-blue-600 w-5/6 lg:w-full"
               />
             ) : (
-              <h3 className="text-lg text-primary-content">{alamat}</h3>
+              <h3 className="text-lg text-black">{alamat}</h3>
             )}
           </div>
         </div>
