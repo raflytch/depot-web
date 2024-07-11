@@ -42,7 +42,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       {/* Sidebar Toggle Button */}
       <button
         onClick={toggleSidebar}
-        className="fixed top-5 left-5 z-50 p-2 rounded-md bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none"
+        className="lg:hidden fixed top-5 left-5 z-50 p-2 rounded-md bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-700 focus:outline-none"
         aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
       >
         {isOpen ? (
@@ -56,7 +56,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <aside
         className={`fixed top-0 left-0 z-40 w-64 h-screen transform transition-transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } bg-gray-50 dark:bg-gray-800`}
+        } lg:translate-x-0 bg-gray-50 dark:bg-gray-800`}
         aria-label="Sidebar"
       >
         <div className="h-full px-3 py-4 overflow-y-auto">

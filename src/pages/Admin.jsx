@@ -23,7 +23,7 @@ const Admin = () => {
         <Sidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
 
         {/* Main Content */}
-        <div className="w-full p-4">
+        <div className="w-full p-4 lg:pl-64">
           <Routes>
             {/* Route to Dashboard */}
             <Route path="/" element={<Dashboard />} />
