@@ -24,7 +24,7 @@ const Avatar = ({ className }) => {
       <div className="avatar online" onClick={handleAvatarClick}>
         <div className="ml-3 lg:ml-0 w-12 rounded-full">
           <img
-            src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.jpg"
+            src="https://cdn-icons-png.freepik.com/512/4226/4226726.png"
             alt="Avatar"
           />
         </div>
