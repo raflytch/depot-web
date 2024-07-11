@@ -37,10 +37,6 @@ const Avatar = ({ className }) => {
           <AvatarManageAccount />
         </div>
       )}
-      <div className="text-white">
-        <p>{nama}</p>
-        <p>{alamat}</p>
-      </div>
     </div>
   );
 };
