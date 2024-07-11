@@ -100,20 +100,20 @@ const EditProfile = function () {
 
   return (
     <main
-      className="min-h-screen max-w-screen overflow-hidden bg-white py-6 px-10 flex flex-col gap-8 rounded-lg shadow-lg"
+      className="min-h-screen max-w-screen overflow-hidden bg-white py-6 px-6 flex flex-col gap-8 rounded-lg shadow-lg"
       data-aos="fade-down"
     >
       <div className="flex items-center mb-8">
         <button
           onClick={handleNavigateHome}
-          className="bg-white text-primary px-3 py-2 rounded hover:bg-gray-200"
+          className="bg-white text-primary px-0 py-2 rounded hover:bg-gray-200"
         >
           <IoMdArrowRoundBack size={24} />
         </button>
       </div>
       <h1 className="text-4xl text-primary font-bold">Profil Anda</h1>
       <Avatar className="scale-150 origin-top-left mb-14" />
-      <div className="flex flex-row justify-between items-start gap-8">
+      <div className="flex flex-row justify-between items-start gap-2">
         <div className="flex flex-col gap-5 w-full">
           <div className="h-16">
             <h2 className="text-lg text-primary font-bold">Nama</h2>
@@ -122,15 +122,15 @@ const EditProfile = function () {
                 type="text"
                 value={inputName}
                 onChange={(e) => setInputName(e.target.value)}
-                className="input bg-white border-2 border-primary rounded px-3 py-2 focus:outline-none focus:border-blue-600 w-full"
+                className="input bg-white border-2 border-primary rounded px-3 py-2 focus:outline-none focus:border-blue-600 w-5/6 lg:w-full text-lg"
               />
             ) : (
-              <h3 className="text-xl text-primary-content">{name}</h3>
+              <h3 className="text-lg text-primary-content">{name}</h3>
             )}
           </div>
           <div className="h-16">
             <h2 className="text-lg text-primary font-bold">Email</h2>
-            <h3 className="text-xl text-primary-content">{email}</h3>
+            <h3 className="text-[14px] text-primary-content">{email}</h3>
           </div>
           <div className="h-auto">
             <h2 className="text-lg text-primary font-bold">Alamat</h2>
@@ -138,7 +138,7 @@ const EditProfile = function () {
               <textarea
                 value={inputAlamat}
                 onChange={(e) => setInputAlamat(e.target.value)}
-                className="input bg-white border-2 border-primary rounded px-3 py-2 h-32 resize-none focus:outline-none focus:border-blue-600 w-full"
+                className="input bg-white border-2 border-primary rounded px-3 py-2 h-32 resize-none focus:outline-none focus:border-blue-600 w-5/6 lg:w-full"
               />
             ) : (
               <h3 className="text-xl text-primary-content">{alamat}</h3>
