@@ -1,5 +1,5 @@
-import React, {useEffect} from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, {useContext, useEffect} from "react";
+import {BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import NotFound from "./pages/404";
 import LandingPage from "./pages/landingpage";
 import AuthLayout from "./template/AuthLayout";
@@ -7,6 +7,7 @@ import ProductPage from "./pages/product";
 import AdminDashboard from "./pages/Admin";
 import EditProfile from "./components/EditProfile"; // Import EditProfile
 import ProtectedRoute from "./components/ProtectedRoute";
+import {AuthContext} from "./contexts/AuthContext.jsx";
 
 const App = () => {
   useEffect(() => {

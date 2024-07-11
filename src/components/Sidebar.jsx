@@ -61,7 +61,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       >
         <div className="h-full px-3 py-4 overflow-y-auto">
           {/* Sidebar Header */}
-          <div className="flex items-center justify-start mb-4 mt-14">
+          <div className="flex items-center justify-start mb-4 mt-14 lg:mt-4">
             <img src={logo} alt="Logo" className="h-10 mr-2" />
             <p className="font-bold text-gray-900 dark:text-gray-200">
               Depot Anugrah
@@ -120,7 +120,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       {/* Background Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black opacity-50 z-30"
+          className="fixed inset-0 bg-black opacity-50 z-30 lg:hidden"
           onClick={toggleSidebar}
           aria-label="Close sidebar"
         ></div>

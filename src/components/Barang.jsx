@@ -170,7 +170,7 @@ const Barang = () => {
   );
 };
 
-const kualitasAirMapper = (kualitasAir) => {
+export const kualitasAirMapper = (kualitasAir) => {
   switch (kualitasAir) {
     case "SANGAT_BAIK":
       return "Sangat Baik";
