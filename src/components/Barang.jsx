@@ -131,7 +131,7 @@ const Barang = () => {
   };
 
   return (
-    <div className="p-4 px-14">
+    <div className="p-4 px-20">
       <h1 className="text-xl font-bold mb-4 text-primary lg:text-3xl">
         Stok Barang
       </h1>

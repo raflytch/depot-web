@@ -4,7 +4,7 @@ import { FaMoneyCheck, FaExternalLinkAlt } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import { Link } from "react-router-dom";
 
-const CardDashboard = ({ type, description, link }) => {
+const CardDashboard = ({ type, description }) => {
   const [payments, setPayments] = useState([]);
   const { token } = useContext(AuthContext);
 
@@ -54,10 +54,10 @@ const CardDashboard = ({ type, description, link }) => {
         {description}
       </p>
       <Link
-        to={link}
+        to="/admin/transaksi"
         className="inline-flex font-medium items-center text-blue-600 hover:underline"
       >
-        {type === "Product" ? "Lihat produk" : "Lihat transaksi"}
+        Lihat Transaski
         <FaExternalLinkAlt className="ml-2" />
       </Link>
     </div>
