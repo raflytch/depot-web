@@ -14,6 +14,7 @@ const Card = ({
   product,
   desc,
   stock,
+    kualitasAir,
   totalRating,
   totalPurchases,
   category,
@@ -181,6 +182,19 @@ const Card = ({
         <p className="text-sm font-normal tracking-tight text-gray-900">
           {desc}
         </p>
+
+
+        <div className="my-2 text-sm">
+          Kualitas Air: <span className={"font-bold p-0.5 px-1 ml-1 rounded " + (kualitasAir === "Sangat Baik" ? "bg-green-400" : (
+              kualitasAir === "Baik" ? "bg-blue-500" : (
+                  kualitasAir === "Cukup Baik" ? "bg-yellow-400" : (
+                      kualitasAir === "Kurang Baik" ? "bg-red-400" : "bg-gray-400"
+                  )
+              )))}>{kualitasAir}</span>
+        </div>
+
+
+
         <div className="flex items-center mt-2.5 mb-5">
           <div className="flex items-center space-x-1 rtl:space-x-reverse">
             {[1, 2, 3, 4, 5].map((star) => (
