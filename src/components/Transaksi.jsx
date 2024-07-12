@@ -38,7 +38,6 @@ const Transaksi = () => {
           };
         });
         formattedData = await Promise.all(formattedData);
-        console.log(formattedData);
         setPayments(formattedData);
         setShowedProducts(formattedData);
       } catch (error) {
@@ -52,8 +51,15 @@ const Transaksi = () => {
   useEffect(() => {
     const filter = (status) => {
       let p;
+      const now = new Date();
       if (status === "ALL") {
         p = payments;
+      } else if (status === "LAST_WEEK") {
+        const lastWeek = new Date(now.setDate(now.getDate() - 7));
+        p = payments.filter((p) => new Date(p.timestamp) >= lastWeek);
+      } else if (status === "LAST_MONTH") {
+        const lastMonth = new Date(now.setMonth(now.getMonth() - 1));
+        p = payments.filter((p) => new Date(p.timestamp) >= lastMonth);
       } else {
         p = payments.filter((p) => p.status === status);
       }
@@ -77,7 +83,7 @@ const Transaksi = () => {
             }
             onClick={() => setViewState("ALL")}
           >
-            All
+            Semua
           </span>
           <span
             className={
@@ -105,6 +111,24 @@ const Transaksi = () => {
             onClick={() => setViewState("FAILED")}
           >
             Failed
+          </span>
+          <span
+            className={
+              "py-2 px-1 cursor-pointer font-semibold transition duration-200 " +
+              (viewState === "LAST_WEEK" ? activeClassName : "")
+            }
+            onClick={() => setViewState("LAST_WEEK")}
+          >
+            Seminggu Terakhir
+          </span>
+          <span
+            className={
+              "py-2 px-1 cursor-pointer font-semibold transition duration-200 " +
+              (viewState === "LAST_MONTH" ? activeClassName : "")
+            }
+            onClick={() => setViewState("LAST_MONTH")}
+          >
+            Sebulan Terakhir
           </span>
         </div>
       </section>

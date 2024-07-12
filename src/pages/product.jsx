@@ -7,7 +7,7 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { AuthContext } from "../contexts/AuthContext";
-import {kualitasAirMapper} from "../components/Barang.jsx";
+import { kualitasAirMapper } from "../components/Barang.jsx";
 
 const ProductPage = () => {
   const [products, setProducts] = useState([]);
@@ -29,7 +29,7 @@ const ProductPage = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        console.log(data)
+        console.log(data);
         setProducts(data);
       } catch (error) {
         console.error("Error fetching products:", error);
@@ -88,6 +88,7 @@ const ProductPage = () => {
                 desc={product.description}
                 price={product.price}
                 img={product.imgUrl}
+                kualitasAir={kualitasAirMapper(product.kualitasAir)}
                 stock={product.stock}
                 totalRating={product.totalRating}
                 totalPurchases={product.totalPurchases}
@@ -108,6 +109,7 @@ const ProductPage = () => {
                 desc={product.description}
                 price={product.price}
                 img={product.imgUrl}
+                kualitasAir={kualitasAirMapper(product.kualitasAir)}
                 stock={product.stock}
                 totalRating={product.totalRating}
                 totalPurchases={product.totalPurchases}
