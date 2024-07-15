@@ -91,9 +91,9 @@ const Transaksi = () => {
   const activeClassName = "text-blue-600 border-b-[3px] border-blue-500";
 
   return (
-    <main className="pt-20 pb-8 px-4 lg:py-8 lg:pl-5">
+    <main className="pt-20 pb-8 px-4 lg:py-8 lg:pl-5 overflow-x-scroll min-h-screen">
       <h1 className="text-2xl font-bold text-primary">Transaksi</h1>
-      <button onClick={handleCetak} className="btn btn-active">Download</button>
+      <button onClick={handleCetak} className="btn btn-active mt-2">Download</button>
       <section className="overflow-x-scroll lg:overflow-x-clip">
         <div className="flex gap-12 p-6 min-w-fit">
           <span
