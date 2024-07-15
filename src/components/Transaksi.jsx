@@ -173,7 +173,12 @@ const Transaksi = () => {
                   {new Date(payment.timestamp).toLocaleString()}
                 </Table.Cell>
                 <Table.Cell>{payment.product.name}</Table.Cell>
-                <Table.Cell>{payment.amount}</Table.Cell>
+                <Table.Cell>{new Intl.NumberFormat("id-ID", {
+                  style: "currency",
+                  currency: "IDR",
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                }).format(payment.amount)}</Table.Cell>
                 <Table.Cell
                   className={
                     "font-semibold " +
@@ -207,7 +212,12 @@ const createTable = (payments) => {
       payment.id,
       new Date(payment.timestamp).toLocaleString(),
       payment.product.name,
-      payment.amount,
+      new Intl.NumberFormat("id-ID", {
+        style: "currency",
+        currency: "IDR",
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      }).format(payment.amount),
       payment.status,
       payment.user.name,
       payment.user.alamat,
@@ -228,7 +238,7 @@ const createTable = (payments) => {
       1: { cellWidth: 30 },
       2: { cellWidth: 20 },
       3: { cellWidth: 17 },
-      4: { cellWidth: 17 },
+      4: { cellWidth: 25 },
       5: { cellWidth: 20 },
       6: { cellWidth: 20 },
       7: { cellWidth: 'auto' },
@@ -238,10 +248,13 @@ const createTable = (payments) => {
     },
     didParseCell: function (data) {
       if (data.section === 'body' && data.column.index === 5) {
+        data.cell.styles.fontStyle = 'bold';
         if (data.cell.raw === 'SUCCESS') {
           data.cell.styles.textColor = [46, 204, 113];
-        } else {
+        } else if (data.cell.raw === 'FAILED') {
           data.cell.styles.textColor = [231, 76, 60];
+        } else {
+          data.cell.styles.textColor = [255, 192, 0];
         }
       }
     },

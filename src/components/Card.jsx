@@ -5,7 +5,7 @@ import Cart from "./Cart";
 import { FaStar } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 import RatingPopup from "./RatingPopUp";
-import { useLocation } from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 const Card = ({
   id,
@@ -21,12 +21,10 @@ const Card = ({
 }) => {
   const [cart, setCart] = useState([]);
   const [showRatingPopup, setShowRatingPopup] = useState(false);
-  const { token } = useContext(AuthContext);
+  const { id: userId, token } = useContext(AuthContext);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const orderId = queryParams.get("order_id");
-  const statusCode = queryParams.get("status_code");
-  const transactionStatus = queryParams.get("transaction_status");
+  const navigate = useNavigate();
 
   const handleAddToCart = () => {
     const formattedPrice = parseFloat(
@@ -71,6 +69,23 @@ const Card = ({
 
   const handlePurchase = async () => {
     const item = cart.find((item) => item.product === product);
+    const responseAlamat = await fetch(import.meta.env.VITE_BACKEND_URI + 'users/alamat/' + userId, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    const {alamat} = await responseAlamat.json();
+    if (!alamat) {
+      Swal.fire({
+        icon: "error",
+        title: "Alamat Tidak Ditemukan",
+        text: "Harap isi alamat di profil anda sebelum melakukan pembelian.",
+      }).then((r) => {
+        navigate("/profile");
+      });
+      return;
+    }
     if (!item || item.count === 0) {
       Swal.fire({
         icon: "error",
