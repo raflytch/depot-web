@@ -93,7 +93,7 @@ const Transaksi = () => {
   return (
     <main className="pt-20 pb-8 px-4 lg:py-8 lg:pl-5 overflow-x-scroll min-h-screen">
       <h1 className="text-2xl font-bold text-primary">Transaksi</h1>
-      <button onClick={handleCetak} className="btn btn-active mt-2">Download</button>
+      <button onClick={handleCetak} className="btn btn-active mt-2">Download PDF</button>
       <section className="overflow-x-scroll lg:overflow-x-clip">
         <div className="flex gap-12 p-6 min-w-fit">
           <span
