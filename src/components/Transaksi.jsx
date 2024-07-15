@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Table } from "flowbite-react";
 import { AuthContext } from "../contexts/AuthContext.jsx";
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const Transaksi = () => {
   const { token } = useContext(AuthContext);
@@ -59,6 +61,12 @@ const Transaksi = () => {
     fetchData();
   }, [token]);
 
+  const handleCetak = () => {
+    if (payments) {
+      createTable(payments)
+    }
+  }
+
   useEffect(() => {
     const filter = (status) => {
       let p;
@@ -85,6 +93,7 @@ const Transaksi = () => {
   return (
     <main className="pt-20 pb-8 px-4 lg:py-8 lg:pl-5">
       <h1 className="text-2xl font-bold text-primary">Transaksi</h1>
+      <button onClick={handleCetak} className="btn btn-active">Download</button>
       <section className="overflow-x-scroll lg:overflow-x-clip">
         <div className="flex gap-12 p-6 min-w-fit">
           <span
@@ -187,5 +196,64 @@ const Transaksi = () => {
     </main>
   );
 };
+
+const createTable = (payments) => {
+  const doc = new jsPDF();
+
+  autoTable(doc, {
+    head: [['#', 'Order ID', 'Tanggal', 'Nama Produk', 'Jumlah', 'Status', 'Nama Pemesan', 'Alamat']],
+    body: payments.map((payment, index) => [
+      index + 1,
+      payment.id,
+      new Date(payment.timestamp).toLocaleString(),
+      payment.product.name,
+      payment.amount,
+      payment.status,
+      payment.user.name,
+      payment.user.alamat,
+    ]),
+    theme: 'striped',
+    styles: {
+      font: 'helvetica',
+      fontSize: 8,
+      cellPadding: 3,
+    },
+    headStyles: {
+      fillColor: [41, 128, 185],
+      textColor: 255,
+      fontStyle: 'bold',
+    },
+    columnStyles: {
+      0: { cellWidth: 'auto' },
+      1: { cellWidth: 30 },
+      2: { cellWidth: 20 },
+      3: { cellWidth: 17 },
+      4: { cellWidth: 17 },
+      5: { cellWidth: 20 },
+      6: { cellWidth: 20 },
+      7: { cellWidth: 'auto' },
+    },
+    alternateRowStyles: {
+      fillColor: [224, 224, 224],
+    },
+    didParseCell: function (data) {
+      if (data.section === 'body' && data.column.index === 5) {
+        if (data.cell.raw === 'SUCCESS') {
+          data.cell.styles.textColor = [46, 204, 113];
+        } else {
+          data.cell.styles.textColor = [231, 76, 60];
+        }
+      }
+    },
+    margin: {
+      top: 5,
+      right: 5,
+      bottom: 5,
+      left: 5,
+    }
+  });
+
+  doc.save('Laporan Transaksi.pdf');
+}
 
 export default Transaksi;
