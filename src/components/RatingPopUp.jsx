@@ -43,7 +43,7 @@ const RatingPopup = ({ id }) => {
     };
 
     fetchProductDetails();
-  }, [paymentId, token]);
+  }, [id, token]);
 
   const handleRatingClick = (selectedRating) => {
     fetch(`${import.meta.env.VITE_BACKEND_URI}products/${productId}/rate`, {
