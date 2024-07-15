@@ -7,7 +7,7 @@ import { AuthContext } from "../contexts/AuthContext.jsx";
 import { IoMdClose } from "react-icons/io";
 import { FaInfoCircle } from "react-icons/fa";
 
-const RatingPopup = ({ paymentId }) => {
+const RatingPopup = ({ id }) => {
   const [rating, setRating] = useState(0);
   const [productId, setProductId] = useState();
   const { token } = useContext(AuthContext);
@@ -18,7 +18,7 @@ const RatingPopup = ({ paymentId }) => {
     const fetchProductDetails = async () => {
       try {
         const response = await fetch(
-          `${import.meta.env.VITE_BACKEND_URI}payments/${paymentId}/product`,
+          `${import.meta.env.VITE_BACKEND_URI}products/${id}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

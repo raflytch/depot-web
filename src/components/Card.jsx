@@ -248,7 +248,7 @@ const Card = ({
         </div>
       </div>
       {showRatingPopup ? (
-        <RatingPopup paymentId={orderId} />
+        <RatingPopup id={id} />
       ) : (
         <></>
       )}
