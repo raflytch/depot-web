@@ -20,6 +20,7 @@ const Card = ({
   category,
 }) => {
   const [cart, setCart] = useState([]);
+  const [showRatingPopup, setShowRatingPopup] = useState(false);
   const { token } = useContext(AuthContext);
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
@@ -246,7 +247,7 @@ const Card = ({
           <Button text={"Beli Sekarang"} onClick={handlePurchase} />
         </div>
       </div>
-      {orderId && transactionStatus === "settlement" && statusCode === "200" ? (
+      {showRatingPopup ? (
         <RatingPopup paymentId={orderId} />
       ) : (
         <></>
