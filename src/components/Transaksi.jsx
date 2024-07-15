@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Table } from "flowbite-react";
-import { kualitasAirMapper } from "./Barang.jsx";
 import { AuthContext } from "../contexts/AuthContext.jsx";
 
 const Transaksi = () => {
@@ -32,9 +31,21 @@ const Transaksi = () => {
             }
           );
           const product = await res.json();
+          const userRes = await fetch(
+              import.meta.env.VITE_BACKEND_URI + "users/" + payment.userId,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: 'application/json',
+              },
+            }
+          )
+          const user = await userRes.json();
+          console.log(user);
           return {
             ...payment,
             product: product,
+            user: user,
           };
         });
         formattedData = await Promise.all(formattedData);
@@ -141,6 +152,8 @@ const Transaksi = () => {
             <Table.HeadCell>Nama Produk</Table.HeadCell>
             <Table.HeadCell>Jumlah</Table.HeadCell>
             <Table.HeadCell>Status</Table.HeadCell>
+            <Table.HeadCell>Nama Pemesan</Table.HeadCell>
+            <Table.HeadCell>Alamat</Table.HeadCell>
           </Table.Head>
           <Table.Body className="divide-y">
             {showedProducts.map((payment, index) => (
@@ -164,6 +177,8 @@ const Transaksi = () => {
                 >
                   {payment.status}
                 </Table.Cell>
+                <Table.Cell>{payment.user.name}</Table.Cell>
+                <Table.Cell>{payment.user.alamat}</Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>

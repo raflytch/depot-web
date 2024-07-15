@@ -10,13 +10,13 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     (async () => {
-      const { id } = state;
+      const { id, token } = state;
       if (id !== -1) {
         const res = await fetch(import.meta.env.VITE_BACKEND_URI + `users/alamat/${id}`, {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${Cookies.get("access_token")}`,
+            Authorization: `Bearer ${token}`,
           },
         })
         const data = await res.json();
