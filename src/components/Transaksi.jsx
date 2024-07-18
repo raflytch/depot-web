@@ -202,7 +202,7 @@ const Transaksi = () => {
             onChange={(e) => setEndDate(e.target.value)}
           />
           <button
-            className="py-2 px-4 bg-blue-500 text-white rounded"
+            className="py-2 px-4 bg-primary text-white rounded-lg"
             onClick={filterByDateRange}
           >
             Filter
