@@ -1,14 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Table } from "flowbite-react";
 import { AuthContext } from "../contexts/AuthContext.jsx";
-import jsPDF from 'jspdf';
-import autoTable from 'jspdf-autotable';
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import Swal from "sweetalert2";
 
 const Transaksi = () => {
   const { token } = useContext(AuthContext);
   const [viewState, setViewState] = useState("ALL");
   const [payments, setPayments] = useState([]);
   const [showedProducts, setShowedProducts] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -22,7 +25,6 @@ const Transaksi = () => {
           }
         );
         const data = await response.json();
-        // Menyusun data produk sesuai format yang dibutuhkan
         let formattedData = data.map(async (payment) => {
           const res = await fetch(
             import.meta.env.VITE_BACKEND_URI + "products/" + payment.productId,
@@ -34,16 +36,15 @@ const Transaksi = () => {
           );
           const product = await res.json();
           const userRes = await fetch(
-              import.meta.env.VITE_BACKEND_URI + "users/" + payment.userId,
+            import.meta.env.VITE_BACKEND_URI + "users/" + payment.userId,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
-                Accept: 'application/json',
+                Accept: "application/json",
               },
             }
-          )
+          );
           const user = await userRes.json();
-          console.log(user);
           return {
             ...payment,
             product: product,
@@ -62,10 +63,25 @@ const Transaksi = () => {
   }, [token]);
 
   const handleCetak = () => {
-    if (payments) {
-      createTable(payments)
+    let dataToPrint = showedProducts;
+    if (startDate && endDate) {
+      dataToPrint = dataToPrint.filter((payment) => {
+        const paymentDate = new Date(payment.timestamp);
+        return (
+          paymentDate >= new Date(startDate) && paymentDate <= new Date(endDate)
+        );
+      });
     }
-  }
+    if (dataToPrint.length > 0) {
+      createTable(dataToPrint);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Tidak ada data transaksi untuk rentang tanggal yang dipilih.",
+      });
+    }
+  };
 
   useEffect(() => {
     const filter = (status) => {
@@ -88,12 +104,33 @@ const Transaksi = () => {
     filter(viewState);
   }, [payments, viewState]);
 
+  const filterByDateRange = () => {
+    if (startDate && endDate) {
+      const filteredPayments = payments.filter((payment) => {
+        const paymentDate = new Date(payment.timestamp);
+        return (
+          paymentDate >= new Date(startDate) && paymentDate <= new Date(endDate)
+        );
+      });
+      const finalFilteredPayments = filteredPayments.filter((payment) => {
+        if (viewState === "ALL") return true;
+        return payment.status === viewState;
+      });
+      setShowedProducts(finalFilteredPayments);
+    }
+  };
+
   const activeClassName = "text-blue-600 border-b-[3px] border-blue-500";
 
   return (
     <main className="pt-20 pb-8 px-4 lg:py-8 lg:pl-5 overflow-x-scroll min-h-screen">
       <h1 className="text-2xl font-bold text-primary">Transaksi</h1>
-      <button onClick={handleCetak} className="btn btn-active mt-2">Download PDF</button>
+      <button
+        onClick={handleCetak}
+        className="btn bg-primary text-white btn-active mt-2"
+      >
+        Download PDF
+      </button>
       <section className="overflow-x-scroll lg:overflow-x-clip">
         <div className="flex gap-12 p-6 min-w-fit">
           <span
@@ -151,6 +188,26 @@ const Transaksi = () => {
             Sebulan Terakhir
           </span>
         </div>
+        <div className="flex gap-4 mt-4">
+          <input
+            type="date"
+            className="p-2 border rounded"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <input
+            type="date"
+            className="p-2 border rounded"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <button
+            className="py-2 px-4 bg-blue-500 text-white rounded"
+            onClick={filterByDateRange}
+          >
+            Filter
+          </button>
+        </div>
       </section>
       <section className="">
         <Table hoverable className="absolute">
@@ -173,12 +230,14 @@ const Transaksi = () => {
                   {new Date(payment.timestamp).toLocaleString()}
                 </Table.Cell>
                 <Table.Cell>{payment.product.name}</Table.Cell>
-                <Table.Cell>{new Intl.NumberFormat("id-ID", {
-                  style: "currency",
-                  currency: "IDR",
-                  minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
-                }).format(payment.amount)}</Table.Cell>
+                <Table.Cell>
+                  {new Intl.NumberFormat("id-ID", {
+                    style: "currency",
+                    currency: "IDR",
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0,
+                  }).format(payment.amount)}
+                </Table.Cell>
                 <Table.Cell
                   className={
                     "font-semibold " +
@@ -202,12 +261,23 @@ const Transaksi = () => {
   );
 };
 
-const createTable = (payments) => {
+const createTable = (filteredPayments) => {
   const doc = new jsPDF();
 
   autoTable(doc, {
-    head: [['#', 'Order ID', 'Tanggal', 'Nama Produk', 'Jumlah', 'Status', 'Nama Pemesan', 'Alamat']],
-    body: payments.map((payment, index) => [
+    head: [
+      [
+        "#",
+        "Order ID",
+        "Tanggal",
+        "Nama Produk",
+        "Jumlah",
+        "Status",
+        "Nama Pemesan",
+        "Alamat",
+      ],
+    ],
+    body: filteredPayments.map((payment, index) => [
       index + 1,
       payment.id,
       new Date(payment.timestamp).toLocaleString(),
@@ -222,36 +292,36 @@ const createTable = (payments) => {
       payment.user.name,
       payment.user.alamat,
     ]),
-    theme: 'striped',
+    theme: "striped",
     styles: {
-      font: 'helvetica',
+      font: "helvetica",
       fontSize: 8,
       cellPadding: 3,
     },
     headStyles: {
       fillColor: [41, 128, 185],
       textColor: 255,
-      fontStyle: 'bold',
+      fontStyle: "bold",
     },
     columnStyles: {
-      0: { cellWidth: 'auto' },
+      0: { cellWidth: "auto" },
       1: { cellWidth: 30 },
       2: { cellWidth: 20 },
       3: { cellWidth: 17 },
       4: { cellWidth: 25 },
       5: { cellWidth: 20 },
       6: { cellWidth: 20 },
-      7: { cellWidth: 'auto' },
+      7: { cellWidth: "auto" },
     },
     alternateRowStyles: {
       fillColor: [224, 224, 224],
     },
     didParseCell: function (data) {
-      if (data.section === 'body' && data.column.index === 5) {
-        data.cell.styles.fontStyle = 'bold';
-        if (data.cell.raw === 'SUCCESS') {
+      if (data.section === "body" && data.column.index === 5) {
+        data.cell.styles.fontStyle = "bold";
+        if (data.cell.raw === "SUCCESS") {
           data.cell.styles.textColor = [46, 204, 113];
-        } else if (data.cell.raw === 'FAILED') {
+        } else if (data.cell.raw === "FAILED") {
           data.cell.styles.textColor = [231, 76, 60];
         } else {
           data.cell.styles.textColor = [255, 192, 0];
@@ -263,10 +333,10 @@ const createTable = (payments) => {
       right: 5,
       bottom: 5,
       left: 5,
-    }
+    },
   });
 
-  doc.save('Laporan Transaksi.pdf');
-}
+  doc.save("transaksi.pdf");
+};
 
 export default Transaksi;
