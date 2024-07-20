@@ -12,6 +12,7 @@ const Transaksi = () => {
   const [showedProducts, setShowedProducts] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [subtotal, setSubtotal] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,8 +73,12 @@ const Transaksi = () => {
         );
       });
     }
+    const calculatedSubtotal = dataToPrint.reduce(
+      (acc, payment) => acc + Number(payment.amount), // Convert to number
+      0
+    );
     if (dataToPrint.length > 0) {
-      createTable(dataToPrint);
+      createTable(dataToPrint, calculatedSubtotal);
     } else {
       Swal.fire({
         icon: "error",
@@ -117,6 +122,11 @@ const Transaksi = () => {
         return payment.status === viewState;
       });
       setShowedProducts(finalFilteredPayments);
+      const calculatedSubtotal = finalFilteredPayments.reduce(
+        (acc, payment) => acc + Number(payment.amount), // Convert to number
+        0
+      );
+      setSubtotal(calculatedSubtotal);
     }
   };
 
@@ -208,6 +218,17 @@ const Transaksi = () => {
             Filter
           </button>
         </div>
+        <div className="mt-4">
+          <h2 className="text-lg font-semibold">
+            Subtotal:{" "}
+            {new Intl.NumberFormat("id-ID", {
+              style: "currency",
+              currency: "IDR",
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 0,
+            }).format(subtotal)}
+          </h2>
+        </div>
       </section>
       <section className="">
         <Table hoverable className="absolute">
@@ -240,12 +261,11 @@ const Transaksi = () => {
                 </Table.Cell>
                 <Table.Cell
                   className={
-                    "font-semibold " +
-                    (payment.status === "PENDING"
-                      ? "text-yellow-400"
-                      : payment.status === "SUCCESS"
-                      ? "text-green-400"
-                      : "text-red-700")
+                    payment.status === "SUCCESS"
+                      ? "text-green-500 font-bold"
+                      : payment.status === "PENDING"
+                      ? "text-yellow-500 font-bold"
+                      : "text-red-500 font-bold"
                   }
                 >
                   {payment.status}
@@ -261,7 +281,7 @@ const Transaksi = () => {
   );
 };
 
-const createTable = (filteredPayments) => {
+const createTable = (filteredPayments, subtotal) => {
   const doc = new jsPDF();
 
   autoTable(doc, {
@@ -336,7 +356,18 @@ const createTable = (filteredPayments) => {
     },
   });
 
-  doc.save("transaksi.pdf");
+  doc.text(
+    `Subtotal: ${new Intl.NumberFormat("id-ID", {
+      style: "currency",
+      currency: "IDR",
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).format(subtotal)}`,
+    14,
+    doc.autoTable.previous.finalY + 10
+  );
+
+  doc.save("Laporan Keuangan.pdf");
 };
 
 export default Transaksi;
