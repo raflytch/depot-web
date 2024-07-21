@@ -42,15 +42,17 @@ const Barang = () => {
     Swal.fire({
       title: "Edit Barang",
       html: `
-        <label>Nama Barang</label>
+        <label for="namaBarang">Nama Barang</label>
         <input type="text" id="namaBarang" class="swal2-input" value="${
           barang.nama
         }" readonly>
-        <label>Jumlah</label>
+        <br />
+        <label for="jumlahBarang">Jumlah</label>
         <input type="number" id="jumlahBarang" class="swal2-input" value="${
           barang.jumlah
         }">
-        <label>Kualitas Air</label>
+        <br />
+        <label for="kualitasAir">Kualitas Air</label>
         <select id="kualitasAir" class="swal2-input">
           <option value="Sangat Baik" ${
             barang.kualitasAir === "Sangat Baik" ? "selected" : ""
